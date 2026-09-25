@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: xxs-game
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 开发期直连家里服务器的 MySQL；部署时可用环境变量覆盖
+    url: ${XXS_DB_URL:jdbc:mysql://192.168.1.53:3306/xxs_game?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${XXS_DB_USER:xxs}
+    password: ${XXS_DB_PASSWORD:Xxs2026pwd}
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 10
+      connection-timeout: 10000
+      pool-name: xxsHikariPool
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+
+# 业务配置（需求文档 10. 安全：JWT 有效期 12h）
+xxs:
+  jwt:
+    # 生产部署请通过环境变量 XXS_JWT_SECRET 覆盖
+    secret: ${XXS_JWT_SECRET:xxs-game-2026-local-dev-secret-key-please-change-in-prod}
+    expire-hours: 12
+  upload:
+    # 奖品图片等上传目录（相对后端运行目录）
+    dir: ${XXS_UPLOAD_DIR:./uploads}
+
+logging:
+  level:
+    com.xxs.game: debug

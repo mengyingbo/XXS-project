@@ -1,0 +1,368 @@
+﻿
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v3.2.12)
+
+2026-09-21T22:02:56.504+08:00  INFO 9648 --- [xxs-game] [           main] com.xxs.game.XxsGameApplication          : Starting XxsGameApplication v1.0.0 using Java 17.0.20.1 with PID 9648 (D:\XXS-project\backend\target\xxs-game-1.0.0.jar started by admin in D:\XXS-project\backend)
+2026-09-21T22:02:56.508+08:00 DEBUG 9648 --- [xxs-game] [           main] com.xxs.game.XxsGameApplication          : Running with Spring Boot v3.2.12, Spring v6.1.15
+2026-09-21T22:02:56.509+08:00  INFO 9648 --- [xxs-game] [           main] com.xxs.game.XxsGameApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-09-21T22:03:03.556+08:00  INFO 9648 --- [xxs-game] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-21T22:03:03.595+08:00  INFO 9648 --- [xxs-game] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-21T22:03:03.596+08:00  INFO 9648 --- [xxs-game] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2026-09-21T22:03:04.122+08:00  INFO 9648 --- [xxs-game] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-21T22:03:04.126+08:00  INFO 9648 --- [xxs-game] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7316 ms
+2026-09-21T22:03:09.330+08:00  INFO 9648 --- [xxs-game] [           main] com.zaxxer.hikari.HikariDataSource       : xxsHikariPool - Starting...
+2026-09-21T22:03:09.820+08:00  INFO 9648 --- [xxs-game] [           main] com.zaxxer.hikari.pool.HikariPool        : xxsHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@571a663c
+2026-09-21T22:03:09.824+08:00  INFO 9648 --- [xxs-game] [           main] com.zaxxer.hikari.HikariDataSource       : xxsHikariPool - Start completed.
+2026-09-21T22:03:09.840+08:00 DEBUG 9648 --- [xxs-game] [           main] c.x.g.mapper.SysConfigMapper.selectList  : ==>  Preparing: SELECT id,config_key,config_value,remark,updated_at FROM sys_config
+2026-09-21T22:03:09.905+08:00 DEBUG 9648 --- [xxs-game] [           main] c.x.g.mapper.SysConfigMapper.selectList  : ==> Parameters: 
+2026-09-21T22:03:10.036+08:00 DEBUG 9648 --- [xxs-game] [           main] c.x.g.mapper.SysConfigMapper.selectList  : <==      Total: 13
+2026-09-21T22:03:12.346+08:00  INFO 9648 --- [xxs-game] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-09-21T22:03:12.379+08:00  INFO 9648 --- [xxs-game] [           main] com.xxs.game.XxsGameApplication          : Started XxsGameApplication in 17.926 seconds (process running for 20.482)
+2026-09-21T22:03:12.414+08:00  INFO 9648 --- [xxs-game] [           main] com.xxs.game.config.DataBootstrap        : ����Ա�˺��Ѵ��ڣ�1 ������������ʼ��
+2026-09-21T22:03:19.560+08:00  INFO 9648 --- [xxs-game] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-21T22:03:19.560+08:00  INFO 9648 --- [xxs-game] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-21T22:03:19.567+08:00  INFO 9648 --- [xxs-game] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2026-09-21T22:06:18.529+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.AdminUserMapper.selectList  : ==>  Preparing: SELECT id,username,password_hash,nickname,must_change_pwd,last_login_at,created_at,updated_at FROM admin_user WHERE (username = ?)
+2026-09-21T22:06:18.548+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.AdminUserMapper.selectList  : ==> Parameters: admin(String)
+2026-09-21T22:06:18.671+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.AdminUserMapper.selectList  : <==      Total: 1
+2026-09-21T22:06:18.989+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.AdminUserMapper.updateById  : ==>  Preparing: UPDATE admin_user SET last_login_at=? WHERE id=?
+2026-09-21T22:06:18.991+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.AdminUserMapper.updateById  : ==> Parameters: 2026-09-21T22:06:18.906471700(LocalDateTime), 1(Long)
+2026-09-21T22:06:19.873+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.AdminUserMapper.updateById  : <==    Updates: 1
+2026-09-21T22:06:21.272+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.g.mapper.AdminUserMapper.selectList  : ==>  Preparing: SELECT id,username,password_hash,nickname,must_change_pwd,last_login_at,created_at,updated_at FROM admin_user WHERE (username = ?)
+2026-09-21T22:06:21.273+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.g.mapper.AdminUserMapper.selectList  : ==> Parameters: admin(String)
+2026-09-21T22:06:21.278+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.g.mapper.AdminUserMapper.selectList  : <==      Total: 1
+2026-09-21T22:06:21.932+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.g.mapper.AdminUserMapper.selectById  : ==>  Preparing: SELECT id,username,password_hash,nickname,must_change_pwd,last_login_at,created_at,updated_at FROM admin_user WHERE id=?
+2026-09-21T22:06:21.933+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.g.mapper.AdminUserMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:21.937+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.g.mapper.AdminUserMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:22.122+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.g.mapper.AdminUserMapper.updateById  : ==>  Preparing: UPDATE admin_user SET password_hash=?, must_change_pwd=? WHERE id=?
+2026-09-21T22:06:22.123+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.g.mapper.AdminUserMapper.updateById  : ==> Parameters: $2a$10$F6vQVbiL8uSnqPfW2hqTp.PxEnUGgTze8xMKQAs7or/7WhKcmEZDe(String), false(Boolean), 1(Long)
+2026-09-21T22:06:22.142+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.g.mapper.AdminUserMapper.updateById  : <==    Updates: 1
+2026-09-21T22:06:23.002+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.g.mapper.AdminUserMapper.selectList  : ==>  Preparing: SELECT id,username,password_hash,nickname,must_change_pwd,last_login_at,created_at,updated_at FROM admin_user WHERE (username = ?)
+2026-09-21T22:06:23.003+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.g.mapper.AdminUserMapper.selectList  : ==> Parameters: admin(String)
+2026-09-21T22:06:23.007+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.g.mapper.AdminUserMapper.selectList  : <==      Total: 1
+2026-09-21T22:06:23.098+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.g.mapper.AdminUserMapper.updateById  : ==>  Preparing: UPDATE admin_user SET last_login_at=? WHERE id=?
+2026-09-21T22:06:23.100+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.g.mapper.AdminUserMapper.updateById  : ==> Parameters: 2026-09-21T22:06:23.097076900(LocalDateTime), 1(Long)
+2026-09-21T22:06:23.543+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.g.mapper.AdminUserMapper.updateById  : <==    Updates: 1
+2026-09-21T22:06:23.573+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.g.mapper.AdminUserMapper.selectById  : ==>  Preparing: SELECT id,username,password_hash,nickname,must_change_pwd,last_login_at,created_at,updated_at FROM admin_user WHERE id=?
+2026-09-21T22:06:23.573+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.g.mapper.AdminUserMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:23.576+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.g.mapper.AdminUserMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:23.775+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] com.xxs.game.mapper.UnitMapper.insert    : ==>  Preparing: INSERT INTO unit ( unit_no, title, description, sort_order ) VALUES ( ?, ?, ?, ? )
+2026-09-21T22:06:23.782+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] com.xxs.game.mapper.UnitMapper.insert    : ==> Parameters: 99(Integer), ���Ե�Ԫ(String), smoke(String), 9900(Integer)
+2026-09-21T22:06:23.802+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] com.xxs.game.mapper.UnitMapper.insert    : <==    Updates: 1
+2026-09-21T22:06:24.572+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.xxs.game.mapper.UnitMapper.selectList  : ==>  Preparing: SELECT id,unit_no,title,description,sort_order,created_at FROM unit ORDER BY sort_order ASC,unit_no ASC
+2026-09-21T22:06:24.572+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.xxs.game.mapper.UnitMapper.selectList  : ==> Parameters: 
+2026-09-21T22:06:24.576+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.xxs.game.mapper.UnitMapper.selectList  : <==      Total: 1
+2026-09-21T22:06:24.701+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] com.xxs.game.mapper.UnitMapper.insert    : ==>  Preparing: INSERT INTO unit ( unit_no, title, description, sort_order ) VALUES ( ?, ?, ?, ? )
+2026-09-21T22:06:24.702+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] com.xxs.game.mapper.UnitMapper.insert    : ==> Parameters: 99(Integer), dup(String), (String), 9901(Integer)
+2026-09-21T22:06:26.024+08:00 ERROR 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.common.GlobalExceptionHandler   : δ�����쳣
+
+org.springframework.dao.DuplicateKeyException: 
+### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '99' for key 'unit.uk_unit_no'
+### The error may exist in com/xxs/game/mapper/UnitMapper.java (best guess)
+### The error may involve com.xxs.game.mapper.UnitMapper.insert-Inline
+### The error occurred while setting parameters
+### SQL: INSERT INTO unit  ( unit_no, title, description, sort_order )  VALUES (  ?, ?, ?, ?  )
+### Cause: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '99' for key 'unit.uk_unit_no'
+; Duplicate entry '99' for key 'unit.uk_unit_no'
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:254) ~[spring-jdbc-6.1.15.jar!/:6.1.15]
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:107) ~[spring-jdbc-6.1.15.jar!/:6.1.15]
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:92) ~[mybatis-spring-3.0.3.jar!/:3.0.3]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:439) ~[mybatis-spring-3.0.3.jar!/:3.0.3]
+	at jdk.proxy2/jdk.proxy2.$Proxy75.insert(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:272) ~[mybatis-spring-3.0.3.jar!/:3.0.3]
+	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.execute(MybatisMapperMethod.java:59) ~[mybatis-plus-core-3.5.7.jar!/:3.5.7]
+	at com.baomidou.mybatisplus.core.override.MybatisMapperProxy$PlainMethodInvoker.invoke(MybatisMapperProxy.java:152) ~[mybatis-plus-core-3.5.7.jar!/:3.5.7]
+	at com.baomidou.mybatisplus.core.override.MybatisMapperProxy.invoke(MybatisMapperProxy.java:89) ~[mybatis-plus-core-3.5.7.jar!/:3.5.7]
+	at jdk.proxy2/jdk.proxy2.$Proxy81.insert(Unknown Source) ~[na:na]
+	at com.xxs.game.service.AdminCatalogService.createUnit(AdminCatalogService.java:63) ~[!/:1.0.0]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.15.jar!/:6.1.15]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.15.jar!/:6.1.15]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.15.jar!/:6.1.15]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.15.jar!/:6.1.15]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.15.jar!/:6.1.15]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.15.jar!/:6.1.15]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.15.jar!/:6.1.15]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.15.jar!/:6.1.15]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.15.jar!/:6.1.15]
+	at com.xxs.game.service.AdminCatalogService$$SpringCGLIB$$0.createUnit(<generated>) ~[!/:1.0.0]
+	at com.xxs.game.controller.AdminCatalogController.createUnit(AdminCatalogController.java:42) ~[!/:1.0.0]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.15.jar!/:6.1.15]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.33.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.15.jar!/:6.1.15]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.33.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:840) ~[na:na]
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '99' for key 'unit.uk_unit_no'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:118) ~[mysql-connector-j-8.3.0.jar!/:8.3.0]
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122) ~[mysql-connector-j-8.3.0.jar!/:8.3.0]
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:912) ~[mysql-connector-j-8.3.0.jar!/:8.3.0]
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:354) ~[mysql-connector-j-8.3.0.jar!/:8.3.0]
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44) ~[HikariCP-5.0.1.jar!/:na]
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java) ~[HikariCP-5.0.1.jar!/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:58) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at jdk.proxy3/jdk.proxy3.$Proxy98.execute(Unknown Source) ~[na:na]
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:48) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.update(RoutingStatementHandler.java:75) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at jdk.proxy2/jdk.proxy2.$Proxy96.update(Unknown Source) ~[na:na]
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:50) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.apache.ibatis.plugin.Invocation.proceed(Invocation.java:61) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor.intercept(MybatisPlusInterceptor.java:106) ~[mybatis-plus-extension-3.5.7.jar!/:3.5.7]
+	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:59) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at jdk.proxy2/jdk.proxy2.$Proxy95.update(Unknown Source) ~[na:na]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:184) ~[mybatis-3.5.16.jar!/:3.5.16]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:425) ~[mybatis-spring-3.0.3.jar!/:3.0.3]
+	... 72 common frames omitted
+
+2026-09-21T22:06:26.133+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.xxs.game.mapper.UnitMapper.selectById  : ==>  Preparing: SELECT id,unit_no,title,description,sort_order,created_at FROM unit WHERE id=?
+2026-09-21T22:06:26.134+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.xxs.game.mapper.UnitMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:26.136+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.xxs.game.mapper.UnitMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:26.142+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.xxs.game.mapper.LessonMapper.insert    : ==>  Preparing: INSERT INTO lesson ( unit_id, lesson_no, title, lesson_type, is_skim, sort_order ) VALUES ( ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:26.143+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.xxs.game.mapper.LessonMapper.insert    : ==> Parameters: 1(Long), 1(Integer), SmokeLesson(String), TEXT(String), true(Boolean), 1(Integer)
+2026-09-21T22:06:26.149+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.xxs.game.mapper.LessonMapper.insert    : <==    Updates: 1
+2026-09-21T22:06:26.623+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:26.624+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:26.627+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:26.631+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] com.xxs.game.mapper.LevelMapper.insert   : ==>  Preparing: INSERT INTO level ( lesson_id, level_no, name, question_count, sort_order ) VALUES ( ?, ?, ?, ?, ? )
+2026-09-21T22:06:26.634+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] com.xxs.game.mapper.LevelMapper.insert   : ==> Parameters: 1(Long), 1(Integer), SmokeL1(String), 4(Integer), 1(Integer)
+2026-09-21T22:06:26.640+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] com.xxs.game.mapper.LevelMapper.insert   : <==    Updates: 1
+2026-09-21T22:06:27.267+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:27.268+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:27.271+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:27.272+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] com.xxs.game.mapper.LevelMapper.insert   : ==>  Preparing: INSERT INTO level ( lesson_id, level_no, name, question_count, sort_order ) VALUES ( ?, ?, ?, ?, ? )
+2026-09-21T22:06:27.274+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] com.xxs.game.mapper.LevelMapper.insert   : ==> Parameters: 1(Long), 2(Integer), (String), 1(Integer), 2(Integer)
+2026-09-21T22:06:27.278+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] com.xxs.game.mapper.LevelMapper.insert   : <==    Updates: 1
+2026-09-21T22:06:27.954+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:27.955+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:27.958+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:27.959+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:27.959+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:27.962+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:27.996+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.xxs.game.mapper.QuestionMapper.insert  : ==>  Preparing: INSERT INTO question ( lesson_id, level_id, type, stem, options, answer, analysis, knowledge_point, difficulty, sort_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:27.999+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.xxs.game.mapper.QuestionMapper.insert  : ==> Parameters: 1(Long), 1(Long), SINGLE(String), Smoke single(String), ["A","B","C"](String), 1(String), because B(String), KP1(String), 1(Integer), 1(Integer)
+2026-09-21T22:06:28.003+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.xxs.game.mapper.QuestionMapper.insert  : <==    Updates: 1
+2026-09-21T22:06:28.517+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:28.519+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:28.521+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:28.522+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:28.522+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:28.524+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:28.550+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:28.551+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:28.553+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:28.554+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:28.555+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:28.558+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:28.587+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:28.588+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:28.591+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:28.592+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:28.592+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:28.595+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:28.597+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.xxs.game.mapper.QuestionMapper.insert  : ==>  Preparing: INSERT INTO question ( lesson_id, level_id, type, stem, answer, analysis, knowledge_point, difficulty, sort_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:28.599+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.xxs.game.mapper.QuestionMapper.insert  : ==> Parameters: 1(Long), 1(Long), JUDGE(String), Smoke judge(String), true(String), (String), KP2(String), 1(Integer), 2(Integer)
+2026-09-21T22:06:28.601+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] c.xxs.game.mapper.QuestionMapper.insert  : <==    Updates: 1
+2026-09-21T22:06:29.117+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:29.118+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:29.121+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:29.121+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:29.122+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:29.124+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:29.126+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.xxs.game.mapper.QuestionMapper.insert  : ==>  Preparing: INSERT INTO question ( lesson_id, level_id, type, stem, answer, analysis, knowledge_point, difficulty, sort_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:29.127+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.xxs.game.mapper.QuestionMapper.insert  : ==> Parameters: 1(Long), 1(Long), BLANK(String), Smoke blank(String), ["chaoshui","chaoshu"](String), pinyin(String), KP2(String), 2(Integer), 3(Integer)
+2026-09-21T22:06:29.130+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.xxs.game.mapper.QuestionMapper.insert  : <==    Updates: 1
+2026-09-21T22:06:29.712+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:29.712+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:29.715+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:29.716+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:29.716+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:29.718+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:29.719+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.xxs.game.mapper.QuestionMapper.insert  : ==>  Preparing: INSERT INTO question ( lesson_id, level_id, type, stem, options, answer, analysis, knowledge_point, difficulty, sort_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:29.720+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.xxs.game.mapper.QuestionMapper.insert  : ==> Parameters: 1(Long), 1(Long), ORDER(String), Smoke order(String), ["one","two","three"](String), [2,0,1](String), order hint(String), KP3(String), 2(Integer), 4(Integer)
+2026-09-21T22:06:29.724+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.xxs.game.mapper.QuestionMapper.insert  : <==    Updates: 1
+2026-09-21T22:06:30.155+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:30.156+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:30.159+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:30.160+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:30.161+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 2(Long)
+2026-09-21T22:06:30.164+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:30.166+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.xxs.game.mapper.QuestionMapper.insert  : ==>  Preparing: INSERT INTO question ( lesson_id, level_id, type, stem, answer, analysis, knowledge_point, difficulty, sort_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:30.167+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.xxs.game.mapper.QuestionMapper.insert  : ==> Parameters: 1(Long), 2(Long), JUDGE(String), Smoke level2 question(String), true(String), (String), KP1(String), 1(Integer), 1(Integer)
+2026-09-21T22:06:30.170+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.xxs.game.mapper.QuestionMapper.insert  : <==    Updates: 1
+2026-09-21T22:06:30.991+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.g.m.Q.selectList_mpCount             : ==>  Preparing: SELECT COUNT(*) AS total FROM question WHERE (lesson_id = ? AND type = ?)
+2026-09-21T22:06:30.992+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.g.m.Q.selectList_mpCount             : ==> Parameters: 1(Long), JUDGE(String)
+2026-09-21T22:06:30.996+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.g.m.Q.selectList_mpCount             : <==      Total: 1
+2026-09-21T22:06:31.003+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.g.mapper.QuestionMapper.selectList   : ==>  Preparing: SELECT id,lesson_id,level_id,type,stem,options,answer,analysis,knowledge_point,difficulty,sort_order,created_at,updated_at FROM question WHERE (lesson_id = ? AND type = ?) ORDER BY lesson_id ASC,sort_order ASC,id ASC LIMIT ?
+2026-09-21T22:06:31.004+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.g.mapper.QuestionMapper.selectList   : ==> Parameters: 1(Long), JUDGE(String), 10(Long)
+2026-09-21T22:06:31.027+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.g.mapper.QuestionMapper.selectList   : <==      Total: 2
+2026-09-21T22:06:31.099+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.m.Q.selectList_mpCount             : ==>  Preparing: SELECT COUNT(*) AS total FROM question WHERE (stem LIKE ?)
+2026-09-21T22:06:31.101+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.m.Q.selectList_mpCount             : ==> Parameters: %Smoke order%(String)
+2026-09-21T22:06:31.104+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.m.Q.selectList_mpCount             : <==      Total: 1
+2026-09-21T22:06:31.104+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.QuestionMapper.selectList   : ==>  Preparing: SELECT id,lesson_id,level_id,type,stem,options,answer,analysis,knowledge_point,difficulty,sort_order,created_at,updated_at FROM question WHERE (stem LIKE ?) ORDER BY lesson_id ASC,sort_order ASC,id ASC LIMIT ?
+2026-09-21T22:06:31.105+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.QuestionMapper.selectList   : ==> Parameters: %Smoke order%(String), 10(Long)
+2026-09-21T22:06:31.109+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.g.mapper.QuestionMapper.selectList   : <==      Total: 1
+2026-09-21T22:06:31.173+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:31.173+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:31.177+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:31.178+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:31.179+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 2(Long)
+2026-09-21T22:06:31.182+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:31.221+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LessonMapper.selectById  : ==>  Preparing: SELECT id,unit_id,lesson_no,title,lesson_type,is_skim,sort_order,created_at FROM lesson WHERE id=?
+2026-09-21T22:06:31.222+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LessonMapper.selectById  : ==> Parameters: 1(Long)
+2026-09-21T22:06:31.224+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LessonMapper.selectById  : <==      Total: 1
+2026-09-21T22:06:31.225+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LevelMapper.selectById   : ==>  Preparing: SELECT id,lesson_id,level_no,name,question_count,sort_order,created_at FROM level WHERE id=?
+2026-09-21T22:06:31.226+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LevelMapper.selectById   : ==> Parameters: 2(Long)
+2026-09-21T22:06:31.229+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.LevelMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:31.233+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.g.mapper.QuestionMapper.selectList   : ==>  Preparing: SELECT id,lesson_id,level_id,type,stem,options,answer,analysis,knowledge_point,difficulty,sort_order,created_at,updated_at FROM question WHERE (lesson_id = ?) ORDER BY sort_order DESC LIMIT 1
+2026-09-21T22:06:31.234+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.g.mapper.QuestionMapper.selectList   : ==> Parameters: 1(Long)
+2026-09-21T22:06:31.237+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.g.mapper.QuestionMapper.selectList   : <==      Total: 1
+2026-09-21T22:06:31.239+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.xxs.game.mapper.QuestionMapper.insert  : ==>  Preparing: INSERT INTO question ( lesson_id, level_id, type, stem, answer, analysis, knowledge_point, difficulty, sort_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:31.241+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.xxs.game.mapper.QuestionMapper.insert  : ==> Parameters: 1(Long), 2(Long), JUDGE(String), Import ok row(String), false(String), (String), KP9(String), 1(Integer), 5(Integer)
+2026-09-21T22:06:31.244+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.xxs.game.mapper.QuestionMapper.insert  : <==    Updates: 1
+2026-09-21T22:06:32.071+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.ChildMapper.selectList   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE (enabled = ?) ORDER BY id ASC
+2026-09-21T22:06:32.072+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.ChildMapper.selectList   : ==> Parameters: true(Boolean)
+2026-09-21T22:06:32.082+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.ChildMapper.selectList   : <==      Total: 0
+2026-09-21T22:06:32.212+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] com.xxs.game.mapper.ChildMapper.insert   : ==>  Preparing: INSERT INTO child ( nickname, avatar, pin_hash, total_points, total_earned, pin_fail_count, enabled ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+2026-09-21T22:06:32.221+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] com.xxs.game.mapper.ChildMapper.insert   : ==> Parameters: SmokeBaby(String), cat(String), $2a$10$cZQkAO8.i4oOBkjZVdZCquWXCACedvXa0XHv8MdZ7vyAYmjAByiuu(String), 0(Integer), 0(Integer), 0(Integer), true(Boolean)
+2026-09-21T22:06:32.225+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-6] com.xxs.game.mapper.ChildMapper.insert   : <==    Updates: 1
+2026-09-21T22:06:32.817+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:32.817+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:32.820+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:32.914+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_fail_count=? WHERE id=?
+2026-09-21T22:06:32.916+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: 1(Integer), 1(Long)
+2026-09-21T22:06:32.920+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:33.265+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:33.266+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:33.268+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:33.360+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_fail_count=? WHERE id=?
+2026-09-21T22:06:33.362+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: 1(Integer), 1(Long)
+2026-09-21T22:06:33.366+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:33.615+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:33.616+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:33.619+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:33.717+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] com.xxs.game.mapper.ChildMapper.update   : ==>  Preparing: UPDATE child SET pin_fail_count=?,locked_until=? WHERE (id = ?)
+2026-09-21T22:06:33.732+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] com.xxs.game.mapper.ChildMapper.update   : ==> Parameters: 0(Integer), null, 1(Long)
+2026-09-21T22:06:33.735+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-4] com.xxs.game.mapper.ChildMapper.update   : <==    Updates: 1
+2026-09-21T22:06:33.761+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:33.762+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:33.765+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:33.847+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_fail_count=? WHERE id=?
+2026-09-21T22:06:33.848+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: 1(Integer), 1(Long)
+2026-09-21T22:06:33.851+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-5] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:34.305+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:34.306+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:34.309+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:34.413+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_fail_count=? WHERE id=?
+2026-09-21T22:06:34.417+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: 1(Integer), 1(Long)
+2026-09-21T22:06:34.420+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-7] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:34.687+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:34.688+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:34.693+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:34.789+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_fail_count=? WHERE id=?
+2026-09-21T22:06:34.790+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: 1(Integer), 1(Long)
+2026-09-21T22:06:34.794+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-8] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:35.130+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:35.131+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:35.134+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:35.217+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_fail_count=? WHERE id=?
+2026-09-21T22:06:35.218+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: 1(Integer), 1(Long)
+2026-09-21T22:06:35.221+08:00 DEBUG 9648 --- [xxs-game] [io-8080-exec-10] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:35.847+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:35.848+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:35.850+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:35.949+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_fail_count=? WHERE id=?
+2026-09-21T22:06:35.950+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: 1(Integer), 1(Long)
+2026-09-21T22:06:35.955+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-9] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:36.239+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:36.239+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:36.242+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:36.330+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] com.xxs.game.mapper.ChildMapper.update   : ==>  Preparing: UPDATE child SET pin_fail_count=?,locked_until=? WHERE (id = ?)
+2026-09-21T22:06:36.331+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] com.xxs.game.mapper.ChildMapper.update   : ==> Parameters: 0(Integer), null, 1(Long)
+2026-09-21T22:06:36.334+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-2] com.xxs.game.mapper.ChildMapper.update   : <==    Updates: 1
+2026-09-21T22:06:36.401+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:36.402+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:36.404+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:36.498+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.updateById   : ==>  Preparing: UPDATE child SET pin_hash=?, pin_fail_count=? WHERE id=?
+2026-09-21T22:06:36.500+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.updateById   : ==> Parameters: $2a$10$klFA9VeNIIMYZAPM2v3rQO9oMec/Rlsw1ZcPPhKLVSM4tJjNqfq8e(String), 0(Integer), 1(Long)
+2026-09-21T22:06:36.503+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] c.x.game.mapper.ChildMapper.updateById   : <==    Updates: 1
+2026-09-21T22:06:36.505+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] com.xxs.game.mapper.ChildMapper.update   : ==>  Preparing: UPDATE child SET locked_until=? WHERE (id = ?)
+2026-09-21T22:06:36.506+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] com.xxs.game.mapper.ChildMapper.update   : ==> Parameters: null, 1(Long)
+2026-09-21T22:06:36.508+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-1] com.xxs.game.mapper.ChildMapper.update   : <==    Updates: 1
+2026-09-21T22:06:37.066+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.selectById   : ==>  Preparing: SELECT id,nickname,avatar,pin_hash,total_points,total_earned,pin_fail_count,locked_until,enabled,created_at,updated_at FROM child WHERE id=?
+2026-09-21T22:06:37.066+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.selectById   : ==> Parameters: 1(Long)
+2026-09-21T22:06:37.068+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] c.x.game.mapper.ChildMapper.selectById   : <==      Total: 1
+2026-09-21T22:06:37.161+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] com.xxs.game.mapper.ChildMapper.update   : ==>  Preparing: UPDATE child SET pin_fail_count=?,locked_until=? WHERE (id = ?)
+2026-09-21T22:06:37.163+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] com.xxs.game.mapper.ChildMapper.update   : ==> Parameters: 0(Integer), null, 1(Long)
+2026-09-21T22:06:37.167+08:00 DEBUG 9648 --- [xxs-game] [nio-8080-exec-3] com.xxs.game.mapper.ChildMapper.update   : <==    Updates: 1

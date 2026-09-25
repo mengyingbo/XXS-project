@@ -1,0 +1,21 @@
+[Unit]
+Description=XXS Game API (Spring Boot)
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=mengyingbo
+WorkingDirectory=/opt/xxs
+ExecStart=/usr/bin/java -jar /opt/xxs/xxs-game.jar
+Environment=XXS_DB_URL=jdbc:mysql://localhost:3306/xxs_game?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+Environment=XXS_DB_USER=xxs
+Environment=XXS_DB_PASSWORD=Xxs2026pwd
+Environment=XXS_JWT_SECRET=xxs-game-2026-prod-7f3a9b2e8c1d4e6f
+Environment=XXS_UPLOAD_DIR=/opt/xxs/uploads
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/xxs/api.log
+StandardError=append:/var/log/xxs/api-error.log
+
+[Install]
+WantedBy=multi-user.target
