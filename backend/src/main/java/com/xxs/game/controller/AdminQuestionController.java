@@ -37,8 +37,9 @@ public class AdminQuestionController {
                                             @RequestParam(required = false) Long lessonId,
                                             @RequestParam(required = false) Long levelId,
                                             @RequestParam(required = false) String type,
-                                            @RequestParam(required = false) String keyword) {
-        return Result.ok(adminCatalogService.listQuestions(page, size, lessonId, levelId, type, keyword));
+                                            @RequestParam(required = false) String keyword,
+                                            @RequestParam(required = false) String subject) {
+        return Result.ok(adminCatalogService.listQuestions(page, size, lessonId, levelId, type, keyword, subject));
     }
 
     @GetMapping("/{id}")

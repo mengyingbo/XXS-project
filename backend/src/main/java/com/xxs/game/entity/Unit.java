@@ -15,6 +15,9 @@ public class Unit {
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    /** 科目：chinese语文 / math数学（v2.0）/ english英语（v2.6） */
+    private String subject;
+
     /** 单元序号 1~8 */
     private Integer unitNo;
 

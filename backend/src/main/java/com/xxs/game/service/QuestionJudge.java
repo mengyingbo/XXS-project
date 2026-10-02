@@ -15,6 +15,7 @@ import java.util.List;
  * SINGLE 单选：answer = 选项下标(数字)；userAnswer = 选项下标(数字)
  * JUDGE  判断：answer = true/false；userAnswer = true/false
  * BLANK  填空：answer = 可接受答案数组；userAnswer = 文本
+ * HAND   词语手写：answer = 可接受答案数组；userAnswer = 识别出的文本（判分同 BLANK）
  * ORDER  排序：answer = 正确顺序对应的原下标数组；userAnswer = 下标数组
  * </pre>
  */
@@ -42,6 +43,7 @@ public class QuestionJudge {
             case "SINGLE" -> answer.asInt(NOT_FOUND_ANSWER) == user.asInt(NOT_FOUND_USER);
             case "JUDGE" -> answer.asBoolean() == user.asBoolean();
             case "BLANK" -> judgeBlank(answer, user);
+            case "HAND" -> judgeBlank(answer, user);
             case "ORDER" -> judgeOrder(answer, user);
             default -> false;
         };

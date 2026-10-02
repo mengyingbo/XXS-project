@@ -19,7 +19,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class QuestionValidator {
 
-    private static final Set<String> TYPES = Set.of("SINGLE", "JUDGE", "BLANK", "ORDER");
+    private static final Set<String> TYPES = Set.of("SINGLE", "JUDGE", "BLANK", "ORDER", "HAND");
 
     private final QuestionJudge questionJudge;
 
@@ -35,7 +35,7 @@ public class QuestionValidator {
         }
         String t = type.trim().toUpperCase();
         if (!TYPES.contains(t)) {
-            errors.add("题型只能是 SINGLE / JUDGE / BLANK / ORDER");
+            errors.add("题型只能是 SINGLE / JUDGE / BLANK / ORDER / HAND");
             return errors;
         }
 
@@ -70,6 +70,15 @@ public class QuestionValidator {
                     }
                 } else if (!answerNode.isValueNode()) {
                     errors.add("填空题答案应为文本或文本数组");
+                }
+            }
+            case "HAND" -> {
+                if (answerNode.isArray()) {
+                    if (answerNode.isEmpty()) {
+                        errors.add("词语手写题可接受答案数组不能为空");
+                    }
+                } else if (!answerNode.isValueNode()) {
+                    errors.add("词语手写题答案应为文本或文本数组");
                 }
             }
             case "ORDER" -> {

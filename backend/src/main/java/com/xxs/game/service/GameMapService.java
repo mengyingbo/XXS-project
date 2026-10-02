@@ -38,6 +38,24 @@ public class GameMapService {
     /** 已通关 */
     public static final String STATUS_PASSED = "PASSED";
 
+    /** 科目：语文（默认） */
+    public static final String SUBJECT_CHINESE = "chinese";
+    /** 科目：数学（v2.0） */
+    public static final String SUBJECT_MATH = "math";
+    /** 科目：英语（v2.6） */
+    public static final String SUBJECT_ENGLISH = "english";
+
+    /** 科目归一化：math→math，english→english，其余（含空）→chinese */
+    public static String normalizeSubject(String subject) {
+        if (SUBJECT_MATH.equalsIgnoreCase(subject)) {
+            return SUBJECT_MATH;
+        }
+        if (SUBJECT_ENGLISH.equalsIgnoreCase(subject)) {
+            return SUBJECT_ENGLISH;
+        }
+        return SUBJECT_CHINESE;
+    }
+
     private final UnitMapper unitMapper;
 
     private final LessonMapper lessonMapper;
@@ -46,11 +64,12 @@ public class GameMapService {
 
     private final ProgressMapper progressMapper;
 
-    /** 闯关地图（孩子端） */
-    public Map<String, Object> map(Long childId) {
-        List<Unit> units = orderedUnits();
-        List<Lesson> lessons = orderedLessons();
-        List<Level> levels = orderedLevels();
+    /** 闯关地图（孩子端，按科目；v2.0 两科进度互相独立） */
+    public Map<String, Object> map(Long childId, String subject) {
+        String sub = normalizeSubject(subject);
+        List<Unit> units = orderedUnits(sub);
+        List<Lesson> lessons = orderedLessons(sub);
+        List<Level> levels = orderedLevels(sub);
         Map<Long, Progress> progressMap = progressMap(childId, levels);
         Map<Long, String> statusMap = resolveStatus(levels, progressMap);
 
@@ -151,16 +170,18 @@ public class GameMapService {
         return result;
     }
 
-    /** 指定关卡当前状态 */
+    /** 指定关卡当前状态（按该关所在科目的关卡链计算） */
     public String statusOf(Long childId, Long levelId) {
-        List<Level> levels = orderedLevels();
+        String subject = subjectOfLevel(levelId);
+        List<Level> levels = orderedLevels(subject);
         Map<Long, Progress> progressMap = progressMap(childId, levels);
         return resolveStatus(levels, progressMap).getOrDefault(levelId, STATUS_LOCKED);
     }
 
-    /** 指定关卡的下一个关卡 id（用于通关后提示解锁），已是最后一关返回 null */
+    /** 指定关卡的下一个关卡 id（同科目内；已是该科最后一关返回 null） */
     public Long nextLevelId(Long levelId) {
-        List<Level> levels = orderedLevels();
+        String subject = subjectOfLevel(levelId);
+        List<Level> levels = orderedLevels(subject);
         for (int i = 0; i < levels.size(); i++) {
             if (Objects.equals(levels.get(i).getId(), levelId)) {
                 return i + 1 < levels.size() ? levels.get(i + 1).getId() : null;
@@ -169,11 +190,31 @@ public class GameMapService {
         return null;
     }
 
-    /** 全局有序的关卡列表 */
-    public List<Level> orderedLevels() {
+    /** 某关卡所属科目（level → lesson → unit.subject；查不到时归为语文） */
+    public String subjectOfLevel(Long levelId) {
+        Level level = levelMapper.selectById(levelId);
+        if (level == null) {
+            return SUBJECT_CHINESE;
+        }
+        Lesson lesson = lessonMapper.selectById(level.getLessonId());
+        if (lesson == null) {
+            return SUBJECT_CHINESE;
+        }
+        Unit unit = unitMapper.selectById(lesson.getUnitId());
+        return unit == null || unit.getSubject() == null
+                ? SUBJECT_CHINESE : normalizeSubject(unit.getSubject());
+    }
+
+    /** 某科目全局有序的关卡列表 */
+    public List<Level> orderedLevels(String subject) {
+        List<Lesson> lessons = orderedLessons(normalizeSubject(subject));
+        if (lessons.isEmpty()) {
+            return List.of();
+        }
+        List<Long> lessonIds = lessons.stream().map(Lesson::getId).toList();
         List<Level> levels = levelMapper.selectList(Wrappers.<Level>lambdaQuery()
+                .in(Level::getLessonId, lessonIds)
                 .orderByAsc(Level::getSortOrder).orderByAsc(Level::getLevelNo).orderByAsc(Level::getId));
-        List<Lesson> lessons = orderedLessons();
         Map<Long, Integer> lessonIndex = new LinkedHashMap<>();
         for (int i = 0; i < lessons.size(); i++) {
             lessonIndex.put(lessons.get(i).getId(), i);
@@ -185,14 +226,20 @@ public class GameMapService {
         return levels;
     }
 
-    public List<Unit> orderedUnits() {
+    public List<Unit> orderedUnits(String subject) {
         return unitMapper.selectList(Wrappers.<Unit>lambdaQuery()
+                .eq(Unit::getSubject, normalizeSubject(subject))
                 .orderByAsc(Unit::getSortOrder).orderByAsc(Unit::getUnitNo));
     }
 
-    public List<Lesson> orderedLessons() {
-        List<Unit> units = orderedUnits();
+    public List<Lesson> orderedLessons(String subject) {
+        List<Unit> units = orderedUnits(subject);
+        if (units.isEmpty()) {
+            return List.of();
+        }
+        List<Long> unitIds = units.stream().map(Unit::getId).toList();
         List<Lesson> lessons = lessonMapper.selectList(Wrappers.<Lesson>lambdaQuery()
+                .in(Lesson::getUnitId, unitIds)
                 .orderByAsc(Lesson::getSortOrder).orderByAsc(Lesson::getLessonNo).orderByAsc(Lesson::getId));
         Map<Long, Integer> unitIndex = new LinkedHashMap<>();
         for (int i = 0; i < units.size(); i++) {

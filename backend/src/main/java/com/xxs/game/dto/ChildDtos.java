@@ -57,6 +57,18 @@ public final class ChildDtos {
             Long durationMs) {
     }
 
+    /** 单题对答案（多邻国式"检查"：只读判题，不写库、不计数、不发分） */
+    public record CheckReq(
+            @NotNull(message = "缺少关卡 id")
+            Long levelId,
+
+            @NotNull(message = "缺少题目 id")
+            Long questionId,
+
+            /** 作答内容（JSON 字符串，口径与 SubmitReq.AnswerItem 一致；为空表示未答） */
+            String userAnswer) {
+    }
+
     /** 提交整关作答 */
     public record SubmitReq(
             @NotNull(message = "缺少关卡 id")

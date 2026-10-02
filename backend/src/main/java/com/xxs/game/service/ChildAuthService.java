@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.xxs.game.common.BizException;
 import com.xxs.game.dto.ChildDtos;
 import com.xxs.game.entity.Child;
+import com.xxs.game.mapper.AnswerRecordMapper;
 import com.xxs.game.mapper.ChildMapper;
 import com.xxs.game.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 孩子端：档案列表 / 注册 / PIN 登录 / 个人信息（需求文档 6.1 F-H5-01、F-H5-02、F-H5-10）
@@ -39,6 +43,8 @@ public class ChildAuthService {
     private final DailyQuotaService dailyQuotaService;
 
     private final ConfigService configService;
+
+    private final AnswerRecordMapper answerRecordMapper;
 
     /** 档案列表（仅 id / 昵称 / 头像） */
     public List<Map<String, Object>> list() {
@@ -125,15 +131,16 @@ public class ChildAuthService {
         return result;
     }
 
-    /** 当前孩子信息 + 今日已答题数/时长 + 剩余额度 */
-    public Map<String, Object> profile(Long childId) {
+    /** 当前孩子信息 + 今日已答题数/时长 + 剩余额度（v2.0：额度按科目分别计算） */
+    public Map<String, Object> profile(Long childId, String subject) {
         Child child = require(childId);
-        DailyQuotaService.DailyUsage usage = dailyQuotaService.usage(childId);
+        DailyQuotaService.DailyUsage usage = dailyQuotaService.usage(childId, subject);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("child", basicInfo(child));
         result.put("points", child.getTotalPoints());
         result.put("totalEarned", child.getTotalEarned());
+        result.put("streakDays", streakDays(childId));
 
         Map<String, Object> today = new LinkedHashMap<>();
         today.put("answeredToday", usage.answeredToday());
@@ -147,6 +154,27 @@ public class ChildAuthService {
 
         result.put("showAnalysisImmediately", configService.getBool(ConfigService.SHOW_ANALYSIS_IMMEDIATELY));
         return result;
+    }
+
+    /**
+     * 连续学习天数（改版需求文档 8.2，只读派生，不落库）：
+     * 以 answer_record 有记录的自然日为准——今天学过则含今天，今天没学从昨天起向前数，
+     * 中间断一天即止；无任何记录为 0。
+     */
+    private int streakDays(Long childId) {
+        List<LocalDate> days = answerRecordMapper.selectDistinctAnswerDays(childId);
+        if (days == null || days.isEmpty()) {
+            return 0;
+        }
+        Set<LocalDate> daySet = new HashSet<>(days);
+        LocalDate today = LocalDate.now();
+        LocalDate cursor = daySet.contains(today) ? today : today.minusDays(1);
+        int streak = 0;
+        while (daySet.contains(cursor)) {
+            streak++;
+            cursor = cursor.minusDays(1);
+        }
+        return streak;
     }
 
     /** 取孩子档案，不存在或停用则报错 */

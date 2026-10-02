@@ -1,7 +1,5 @@
 package com.xxs.game.service;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.xxs.game.entity.AnswerRecord;
 import com.xxs.game.mapper.AnswerRecordMapper;
 import com.xxs.game.mapper.GameSessionMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * 每日额度：答题数量上限 + 游玩时长上限（需求文档 3.3 约束）
+ * v2.0：语文 / 数学两科各一套额度，分别计算、分别拦截
  */
 @Service
 @RequiredArgsConstructor
@@ -23,12 +22,12 @@ public class DailyQuotaService {
 
     private final ConfigService configService;
 
-    public DailyUsage usage(Long childId) {
+    /** 指定孩子、指定科目的今日额度情况（v2.0 每科各一套） */
+    public DailyUsage usage(Long childId, String subject) {
+        String sub = GameMapService.normalizeSubject(subject);
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();
-        long answered = answerRecordMapper.selectCount(Wrappers.<AnswerRecord>lambdaQuery()
-                .eq(AnswerRecord::getChildId, childId)
-                .ge(AnswerRecord::getCreatedAt, todayStart));
-        long usedMillis = gameSessionMapper.sumDurationSince(childId, todayStart);
+        long answered = answerRecordMapper.countAnsweredSinceBySubject(childId, todayStart, sub);
+        long usedMillis = gameSessionMapper.sumDurationSinceBySubject(childId, todayStart, sub);
 
         int questionLimit = configService.getInt(ConfigService.DAILY_QUESTION_LIMIT);
         int minuteLimit = configService.getInt(ConfigService.DAILY_MINUTE_LIMIT);

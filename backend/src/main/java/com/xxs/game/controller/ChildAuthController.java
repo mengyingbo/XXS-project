@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -43,9 +44,9 @@ public class ChildAuthController {
         return Result.ok(childAuthService.login(req));
     }
 
-    /** 当前孩子信息 + 今日额度 */
+    /** 当前孩子信息 + 今日额度（v2.0：subject=chinese|math，额度按科目分别计算） */
     @GetMapping("/profile")
-    public Result<Map<String, Object>> profile() {
-        return Result.ok(childAuthService.profile(AuthContext.require()));
+    public Result<Map<String, Object>> profile(@RequestParam(required = false) String subject) {
+        return Result.ok(childAuthService.profile(AuthContext.require(), subject));
     }
 }

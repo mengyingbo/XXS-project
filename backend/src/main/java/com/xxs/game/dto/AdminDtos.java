@@ -59,6 +59,7 @@ public final class AdminDtos {
     // ---------------- 单元 / 课文 / 关卡 ----------------
 
     public record UnitSaveReq(
+            String subject,
             @NotNull(message = "请填写单元序号") Integer unitNo,
             @NotBlank(message = "请填写单元标题") @Size(max = 50, message = "标题过长") String title,
             @Size(max = 255, message = "说明过长") String description,

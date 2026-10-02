@@ -56,6 +56,7 @@ public class AdminCatalogService {
     @Transactional
     public Unit createUnit(AdminDtos.UnitSaveReq req) {
         Unit unit = new Unit();
+        unit.setSubject(normalizeSubject(req.subject()));
         unit.setUnitNo(req.unitNo());
         unit.setTitle(req.title().trim());
         unit.setDescription(req.description() == null ? "" : req.description().trim());
@@ -70,6 +71,7 @@ public class AdminCatalogService {
         if (unit == null) {
             throw BizException.notFound("单元不存在");
         }
+        unit.setSubject(normalizeSubject(req.subject()));
         unit.setUnitNo(req.unitNo());
         unit.setTitle(req.title().trim());
         unit.setDescription(req.description() == null ? "" : req.description().trim());
@@ -78,6 +80,17 @@ public class AdminCatalogService {
         }
         unitMapper.updateById(unit);
         return unit;
+    }
+
+    /** 科目归一化（v2.6）：只允许 chinese / math / english */
+    private String normalizeSubject(String subject) {
+        String sub = subject == null || subject.isBlank() ? GameMapService.SUBJECT_CHINESE : subject.trim().toLowerCase();
+        if (!GameMapService.SUBJECT_CHINESE.equals(sub)
+                && !GameMapService.SUBJECT_MATH.equals(sub)
+                && !GameMapService.SUBJECT_ENGLISH.equals(sub)) {
+            throw BizException.badRequest("科目只能是 chinese、math 或 english");
+        }
+        return sub;
     }
 
     @Transactional
@@ -216,12 +229,24 @@ public class AdminCatalogService {
     // ---------------- 题目 ----------------
 
     public Map<String, Object> listQuestions(int page, int size, Long lessonId, Long levelId,
-                                             String type, String keyword) {
+                                             String type, String keyword, String subject) {
+        // v2.0：按科目筛选（科目挂在 unit 上，先解析出该科目的课文 id 集合）
+        List<Long> subjectLessonIds = null;
+        if (subject != null && !subject.isBlank()) {
+            String sub = GameMapService.normalizeSubject(subject);
+            List<Long> unitIds = unitMapper.selectList(Wrappers.<Unit>lambdaQuery()
+                            .eq(Unit::getSubject, sub)).stream().map(Unit::getId).toList();
+            subjectLessonIds = unitIds.isEmpty() ? List.of(-1L)
+                    : lessonMapper.selectList(Wrappers.<Lesson>lambdaQuery()
+                            .in(Lesson::getUnitId, unitIds)).stream().map(Lesson::getId).toList();
+        }
+
         IPage<Question> result = questionMapper.selectPage(new Page<>(page, size),
                 Wrappers.<Question>lambdaQuery()
                         .eq(lessonId != null, Question::getLessonId, lessonId)
                         .eq(levelId != null, Question::getLevelId, levelId)
                         .eq(type != null && !type.isBlank(), Question::getType, type)
+                        .in(subjectLessonIds != null, Question::getLessonId, subjectLessonIds)
                         .like(keyword != null && !keyword.isBlank(), Question::getStem, keyword)
                         .orderByAsc(Question::getLessonId)
                         .orderByAsc(Question::getSortOrder)

@@ -77,11 +77,12 @@ public class GameSessionService {
         if (level == null) {
             throw BizException.notFound("关卡不存在");
         }
+        String subject = gameMapService.subjectOfLevel(levelId);
         if (GameMapService.STATUS_LOCKED.equals(gameMapService.statusOf(childId, levelId))) {
             throw new BizException(409, "这一关还没有解锁，先通过前面的关卡吧");
         }
 
-        DailyQuotaService.DailyUsage usage = dailyQuotaService.usage(childId);
+        DailyQuotaService.DailyUsage usage = dailyQuotaService.usage(childId, subject);
         if (usage.questionLimitReached()) {
             throw new BizException(409, "今天学得很棒，题目已经做完啦，明天再来吧！");
         }
@@ -112,6 +113,10 @@ public class GameSessionService {
             node.put("options", questionJudge.read(question.getOptions()));
             node.put("difficulty", question.getDifficulty());
             node.put("knowledgePoint", question.getKnowledgePoint());
+            // 词语手写题需在前端做"目标字在候选前 K 即判对"的宽松匹配，因此下发答案
+            if ("HAND".equalsIgnoreCase(question.getType())) {
+                node.put("answer", questionJudge.read(question.getAnswer()));
+            }
             questionNodes.add(node);
         }
 
@@ -124,7 +129,38 @@ public class GameSessionService {
         result.put("questionCount", questions.size());
         result.put("questions", questionNodes);
         result.put("showAnalysisImmediately", configService.getBool(ConfigService.SHOW_ANALYSIS_IMMEDIATELY));
+        result.put("subject", subject);
         result.put("today", todayNode(usage));
+        return result;
+    }
+
+    /**
+     * 单题对答案（多邻国式"检查"，改版需求文档 5.2）：
+     * 只判题并返回对错/正确答案/解析；不校验解锁与每日额度，不写任何表、
+     * 不占答题计数、不发积分。正式结算一律以 {@link #submit} 为准。
+     */
+    public Map<String, Object> check(Long childId, ChildDtos.CheckReq req) {
+        Child child = childAuthService.require(childId);
+        if (!Boolean.TRUE.equals(child.getEnabled())) {
+            throw new BizException(403, "该档案已被家长停用");
+        }
+
+        Question question = questionMapper.selectById(req.questionId());
+        if (question == null) {
+            throw BizException.notFound("题目不存在");
+        }
+        if (!req.levelId().equals(question.getLevelId())) {
+            throw BizException.badRequest("题目不属于本关卡：" + req.questionId());
+        }
+
+        String userAnswerJson = toJsonAnswer(req.userAnswer(), question.getType());
+        boolean correct = questionJudge.judge(question.getType(), question.getAnswer(), userAnswerJson);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("questionId", question.getId());
+        result.put("isCorrect", correct);
+        result.put("correctAnswer", questionJudge.read(question.getAnswer()));
+        result.put("analysis", question.getAnalysis());
         return result;
     }
 
@@ -283,7 +319,8 @@ public class GameSessionService {
         result.put("points", latest.getTotalPoints());
         result.put("nextLevelId", nextLevelId);
         result.put("details", details);
-        result.put("today", todayNode(dailyQuotaService.usage(childId)));
+        result.put("subject", gameMapService.subjectOfLevel(req.levelId()));
+        result.put("today", todayNode(dailyQuotaService.usage(childId, gameMapService.subjectOfLevel(req.levelId()))));
         return result;
     }
 

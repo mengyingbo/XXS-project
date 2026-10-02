@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -27,16 +28,22 @@ public class ChildGameController {
 
     private final GameSessionService gameSessionService;
 
-    /** 单元 → 课文 → 关卡 树 + 解锁状态 + 星级 */
+    /** 单元 → 课文 → 关卡 树 + 解锁状态 + 星级（v2.0：subject=chinese|math，两科进度独立） */
     @GetMapping("/map")
-    public Result<Map<String, Object>> map() {
-        return Result.ok(gameMapService.map(AuthContext.require()));
+    public Result<Map<String, Object>> map(@RequestParam(required = false) String subject) {
+        return Result.ok(gameMapService.map(AuthContext.require(), subject));
     }
 
     /** 开始一关（校验额度，返回不含答案的题目） */
     @PostMapping("/session/start")
     public Result<Map<String, Object>> start(@Valid @RequestBody ChildDtos.StartReq req) {
         return Result.ok(gameSessionService.start(AuthContext.require(), req.levelId()));
+    }
+
+    /** 单题对答案（多邻国式"检查"，只读：不写库、不计数、不发分） */
+    @PostMapping("/session/check")
+    public Result<Map<String, Object>> check(@Valid @RequestBody ChildDtos.CheckReq req) {
+        return Result.ok(gameSessionService.check(AuthContext.require(), req));
     }
 
     /** 提交整关答案，返回结算 */

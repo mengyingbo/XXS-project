@@ -5,6 +5,7 @@ import com.xxs.game.entity.AnswerRecord;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,9 @@ import java.util.Map;
 public interface AnswerRecordMapper extends BaseMapper<AnswerRecord> {
 
     /**
-     * 错题本：取每道题「最近一次作答为错误」的题目（即孩子当前仍未掌握的题）
+     * 错题本（2026-09-26 规则调整）：只要曾答错即收录，不因重做答对而移除；
+     * mastered = 最近一次作答是否正确（1 已掌握 / 0 未掌握）；
+     * 排序：未掌握在前，同组内按最近一次答错的记录倒序；上限 limit 条。
      */
     @Select("""
             SELECT q.id            AS questionId,
@@ -25,22 +28,44 @@ public interface AnswerRecordMapper extends BaseMapper<AnswerRecord> {
                    q.difficulty    AS difficulty,
                    l.title         AS lessonTitle,
                    u.title         AS unitTitle,
-                   a.user_answer   AS userAnswer,
-                   a.created_at    AS answeredAt,
-                   (SELECT COUNT(*) FROM answer_record a2
-                     WHERE a2.child_id = a.child_id AND a2.question_id = a.question_id AND a2.is_correct = 0) AS wrongCount
+                   u.subject       AS subject,
+                   COUNT(*)        AS wrongCount,
+                   (SELECT a3.is_correct FROM answer_record a3
+                     WHERE a3.child_id = #{childId} AND a3.question_id = q.id
+                     ORDER BY a3.id DESC LIMIT 1) AS latestCorrect,
+                   (SELECT MAX(a4.id) FROM answer_record a4
+                     WHERE a4.child_id = #{childId} AND a4.question_id = q.id AND a4.is_correct = 0) AS lastWrongId
               FROM answer_record a
               JOIN question q ON q.id = a.question_id
               JOIN lesson   l ON l.id = q.lesson_id
               JOIN unit     u ON u.id = l.unit_id
              WHERE a.child_id = #{childId}
                AND a.is_correct = 0
-               AND a.id = (SELECT MAX(a3.id) FROM answer_record a3
-                            WHERE a3.child_id = a.child_id AND a3.question_id = a.question_id)
-             ORDER BY a.id DESC
+             GROUP BY q.id, q.stem, q.type, q.options, q.answer, q.analysis,
+                      q.knowledge_point, q.difficulty, l.title, u.title, u.subject
+             ORDER BY latestCorrect ASC, lastWrongId DESC
              LIMIT #{limit}
             """)
     List<Map<String, Object>> selectWrongQuestions(@Param("childId") Long childId, @Param("limit") int limit);
+
+    /** 孩子有作答记录的自然日（去重，用于计算连续学习天数 streakDays） */
+    @Select("SELECT DISTINCT DATE(created_at) FROM answer_record WHERE child_id = #{childId}")
+    List<LocalDate> selectDistinctAnswerDays(@Param("childId") Long childId);
+
+    /** 某孩子某时间之后、指定科目的已答题数（v2.0 每日限额按科目分别计算） */
+    @Select("""
+            SELECT COUNT(*)
+              FROM answer_record a
+              JOIN question q ON q.id = a.question_id
+              JOIN lesson   l ON l.id = q.lesson_id
+              JOIN unit     u ON u.id = l.unit_id
+             WHERE a.child_id = #{childId}
+               AND a.created_at >= #{start}
+               AND u.subject = #{subject}
+            """)
+    long countAnsweredSinceBySubject(@Param("childId") Long childId,
+                                     @Param("start") LocalDateTime start,
+                                     @Param("subject") String subject);
 
     /** 指定时间以来出现过答题行为的孩子数（今日活跃） */
     @Select("SELECT COUNT(DISTINCT child_id) FROM answer_record WHERE created_at >= #{start}")
