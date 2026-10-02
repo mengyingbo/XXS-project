@@ -1,24 +1,36 @@
-/* 全局样式：儿童向大字大按钮，平板横竖屏自适应（需求 F-H5-11） */
+/* 全局样式：多邻国式深色卡通主题（改版需求文档第 3 章），平板横竖屏自适应（F-H5-11） */
 
 :root {
-  --primary: #4f7cff;
-  --primary-dark: #3a63d8;
-  --primary-soft: #e8efff;
-  --success: #2fbf71;
-  --success-soft: #e4f8ee;
-  --danger: #f25c5c;
-  --danger-soft: #fdecec;
-  --warning: #ffa928;
-  --warning-soft: #fff4e0;
-  --star: #ffc531;
-  --text-main: #2b3350;
-  --text-sub: #7a839e;
-  --bg: #f3f6fd;
-  --card: #ffffff;
-  --border: #e6eaf5;
+  /* 主行动色 = 多邻国绿厚边按钮 */
+  --primary: #58cc02;
+  --primary-dark: #49a700;
+  --primary-soft: #20361f;
+  /* 选中/信息蓝 */
+  --info: #1cb0f6;
+  --info-soft: #12303d;
+  --info-border: #84d8ff;
+  --success: #58cc02;
+  --success-soft: #20361f;
+  --danger: #ff4b4b;
+  --danger-soft: #3d2222;
+  --warning: #ff9600;
+  --warning-dark: #e07d00;
+  --warning-soft: #3a2a18;
+  --gold: #ffc800;
+  --gold-dark: #e0a800;
+  --star: #ffc800;
+  /* 深色底 */
+  --text-main: #f7f7f7;
+  --text-sub: #a7b3bb;
+  --bg: #131f24;
+  --card: #1f2c34;
+  --card-2: #273742;
+  --border: #37464f;
+  --border-light: #4a5a64;
   --radius-lg: 20px;
   --radius-md: 14px;
-  --shadow-card: 0 6px 20px rgba(60, 80, 140, 0.08);
+  --radius-btn: 16px;
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.28);
   --min-tap: 48px;
 }
 
@@ -40,7 +52,9 @@ body {
   line-height: 1.6;
   color: var(--text-main);
   background: var(--bg);
+  color-scheme: dark;
   overscroll-behavior: none;
+  overflow-x: hidden;
 }
 
 #app {
@@ -80,45 +94,57 @@ input {
   padding-bottom: 32px;
 }
 
-/* ---------- 通用按钮：最小点击区 48px ---------- */
+/* ---------- 通用按钮：厚边 3D 风，最小点击区 48px ---------- */
 
 .btn {
   min-height: var(--min-tap);
   padding: 12px 24px;
-  border-radius: 999px;
+  border-radius: var(--radius-btn);
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: transform 0.08s ease, opacity 0.2s ease, background 0.2s ease;
+  transition: transform 0.08s ease, opacity 0.2s ease, background 0.2s ease, box-shadow 0.08s ease;
 }
 
 .btn:active {
-  transform: scale(0.97);
+  transform: translateY(2px);
 }
 
 .btn-primary {
   background: var(--primary);
   color: #fff;
-  box-shadow: 0 6px 14px rgba(79, 124, 255, 0.3);
+  box-shadow: 0 4px 0 var(--primary-dark);
+}
+
+.btn-primary:active {
+  box-shadow: 0 1px 0 var(--primary-dark);
 }
 
 .btn-primary:disabled {
-  background: #b9c6e8;
-  box-shadow: none;
+  background: #3c484f;
+  color: #8fa0aa;
+  box-shadow: 0 4px 0 #2e3a41;
   cursor: not-allowed;
 }
 
 .btn-ghost {
-  background: var(--primary-soft);
-  color: var(--primary);
+  background: #3c484f;
+  color: var(--text-main);
+  box-shadow: 0 4px 0 #2e3a41;
+}
+
+.btn-ghost:active {
+  box-shadow: 0 1px 0 #2e3a41;
 }
 
 .btn-danger {
   background: var(--danger);
   color: #fff;
+  box-shadow: 0 4px 0 #d93b3b;
 }
 
 .btn-block {
@@ -127,6 +153,7 @@ input {
 
 .card {
   background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   padding: 20px;
@@ -134,7 +161,7 @@ input {
 
 .page-title {
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 4px;
 }
 
@@ -152,24 +179,24 @@ input {
   padding: 3px 12px;
   border-radius: 999px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .badge-skim {
   background: var(--warning-soft);
-  color: #c97c00;
+  color: #ffb347;
 }
 
 .badge-garden {
   background: var(--success-soft);
-  color: #1d9c5a;
+  color: #7be338;
 }
 
 /* ---------- 表单 ---------- */
 
 .field-label {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-sub);
   margin-bottom: 10px;
 }
@@ -177,17 +204,22 @@ input {
 .text-input {
   width: 100%;
   min-height: var(--min-tap);
-  border: 2px solid var(--border);
+  border: 2px solid var(--border-light);
   border-radius: var(--radius-md);
   padding: 10px 16px;
   font-size: 18px;
-  background: #fbfcff;
+  background: var(--bg);
+  color: var(--text-main);
   outline: none;
   transition: border-color 0.15s ease;
 }
 
+.text-input::placeholder {
+  color: #78848d;
+}
+
 .text-input:focus {
-  border-color: var(--primary);
+  border-color: var(--info-border);
 }
 
 /* ---------- 弹层 ---------- */
@@ -195,7 +227,7 @@ input {
 .mask {
   position: fixed;
   inset: 0;
-  background: rgba(30, 38, 66, 0.45);
+  background: rgba(6, 12, 16, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -206,17 +238,18 @@ input {
 .modal {
   width: 100%;
   max-width: 420px;
-  background: #fff;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 26px 22px;
-  box-shadow: 0 18px 50px rgba(30, 38, 66, 0.25);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
   max-height: 86vh;
   overflow-y: auto;
 }
 
 .modal-title {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 800;
   text-align: center;
   margin-bottom: 18px;
 }
@@ -241,9 +274,9 @@ input {
   padding: 12px 22px;
   border-radius: 999px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   color: #fff;
-  box-shadow: 0 8px 24px rgba(30, 38, 66, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   animation: toast-in 0.18s ease;
 }
 
@@ -252,11 +285,11 @@ input {
 }
 
 .toast-success {
-  background: var(--success);
+  background: var(--primary);
 }
 
 .toast-info {
-  background: #5b6478;
+  background: #4a5a64;
 }
 
 @keyframes toast-in {
@@ -297,7 +330,7 @@ input {
 .spinner {
   width: 34px;
   height: 34px;
-  border: 4px solid var(--primary-soft);
+  border: 4px solid #2c3a44;
   border-top-color: var(--primary);
   border-radius: 50%;
   margin: 0 auto 12px;
@@ -327,5 +360,17 @@ input {
 @media (max-height: 500px) and (orientation: landscape) {
   .page {
     padding-top: 12px;
+  }
+}
+
+/* 尊重系统"减少动态效果"设置（改版需求 3.2） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

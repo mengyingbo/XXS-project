@@ -74,13 +74,15 @@ export interface GameMap {
 
 // ---- 答题 ----
 
-export type QuestionType = 'SINGLE' | 'JUDGE' | 'BLANK' | 'ORDER'
+export type QuestionType = 'SINGLE' | 'JUDGE' | 'BLANK' | 'ORDER' | 'HAND'
 
 export interface QuestionNode {
   id: number
   type: QuestionType
   stem: string
   options: string[] | null
+  /** 仅 HAND 题下发：可接受答案（供前端宽松匹配） */
+  answer?: string[] | null
   difficulty: number
   knowledgePoint: string | null
 }
@@ -119,6 +121,14 @@ export interface PointsBreakdown {
   combo: number
   passBonus: number
   threeStarBonus: number
+}
+
+/** /child/session/check 只读判题响应 */
+export interface AnswerCheck {
+  questionId: number
+  isCorrect: boolean
+  correctAnswer: unknown
+  analysis: string | null
 }
 
 export interface SessionSubmit {
@@ -214,6 +224,10 @@ export interface WrongQuestion {
   correctAnswer: unknown
   knowledgePoint: string | null
   wrongCount: number
+  /** 最近一次作答是否正确（true = 已掌握） */
+  mastered: boolean
+  /** 所属科目（用于错题本科目筛选） */
+  subject: 'chinese' | 'math' | 'english'
   unitTitle?: string
   lessonTitle?: string
   analysis?: string | null

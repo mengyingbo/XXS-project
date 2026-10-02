@@ -29,18 +29,19 @@ export const childApi = {
     return request({ url: '/child/login', method: 'POST', data })
   },
 
-  profile(): Promise<{
+  profile(subject?: string): Promise<{
     child: ChildBrief
     points: number
     totalEarned: number
+    streakDays: number
     today: import('@/types/api').TodayUsage
     showAnalysisImmediately: boolean
   }> {
-    return request({ url: '/child/profile', method: 'GET' })
+    return request({ url: '/child/profile', method: 'GET', params: subject ? { subject } : undefined })
   },
 
-  map(): Promise<GameMap> {
-    return request({ url: '/child/map', method: 'GET' })
+  map(subject: string): Promise<GameMap> {
+    return request({ url: '/child/map', method: 'GET', params: { subject } })
   },
 
   start(levelId: number): Promise<SessionStart> {
@@ -53,6 +54,15 @@ export const childApi = {
     answers: AnswerItemReq[]
   }): Promise<SessionSubmit> {
     return request({ url: '/child/session/submit', method: 'POST', data })
+  },
+
+  /** 单题对答案（多邻国式"检查"，只读：不写库、不计数、不发分） */
+  check(data: {
+    levelId: number
+    questionId: number
+    userAnswer: string
+  }): Promise<import('@/types/api').AnswerCheck> {
+    return request({ url: '/child/session/check', method: 'POST', data })
   },
 
   prizeList(): Promise<PrizeList> {
@@ -77,6 +87,8 @@ export const childApi = {
       answer?: string | null
       knowledgePoint?: string | null
       wrongCount: number
+      latestCorrect?: number | null
+      subject?: 'chinese' | 'math' | 'english' | null
       unitTitle?: string
       lessonTitle?: string
       analysis?: string | null
@@ -97,6 +109,8 @@ export const childApi = {
       correctAnswer: parseJson(w.answer),
       knowledgePoint: w.knowledgePoint ?? null,
       wrongCount: w.wrongCount,
+      mastered: w.latestCorrect === 1,
+      subject: w.subject ?? 'chinese',
       unitTitle: w.unitTitle,
       lessonTitle: w.lessonTitle,
       analysis: w.analysis ?? null

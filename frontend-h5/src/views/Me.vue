@@ -110,15 +110,34 @@
 
       <!-- 错题本 -->
       <div v-else class="list">
-        <div v-if="wrongList.length === 0" class="empty card">
-          <span class="emoji">🎉</span>错题本是空的，继续保持！
+        <!-- 科目筛选 -->
+        <div class="tabs card sub-tabs">
+          <button
+            v-for="s in SUBJECT_TABS"
+            :key="s.key"
+            class="tab-btn"
+            :class="{ on: wrongSubject === s.key }"
+            @click="wrongSubject = s.key"
+          >
+            {{ s.label }}
+          </button>
         </div>
-        <div v-for="(w, i) in wrongList" :key="w.questionId" class="list-item card wrong">
+        <div v-if="wrongFiltered.length === 0" class="empty card">
+          <span class="emoji">🎉</span>{{ wrongSubject === '' ? '错题本是空的，继续保持！' : '该科目还没有错题，继续保持！' }}
+        </div>
+        <div
+          v-for="(w, i) in wrongFiltered"
+          :key="w.questionId"
+          class="list-item card wrong"
+          :class="{ mastered: w.mastered }"
+        >
           <div class="li-title">
             <span class="w-idx">{{ i + 1 }}</span>{{ w.stem }}
+            <span v-if="w.mastered" class="w-mastered">已掌握</span>
           </div>
           <div class="w-line">
-            <span class="w-kp">{{ TYPE_LABEL[w.type] }}{{ w.knowledgePoint ? ' · ' + w.knowledgePoint : '' }}</span>
+            <span class="w-subject" :class="w.subject">{{ w.subject === 'math' ? '数学' : w.subject === 'english' ? '英语' : '语文' }}</span>
+            <span class="w-kp">{{ TYPE_LABEL[w.type] }}{{ w.knowledgePoint ? ' · ' + w.knowledgePoint : '' }} · 错 {{ w.wrongCount }} 次</span>
           </div>
           <div class="w-line">
             <span class="w-label">正确答案</span>
@@ -151,6 +170,13 @@ const TABS = [
 ] as const
 
 type TabKey = (typeof TABS)[number]['key']
+
+const SUBJECT_TABS = [
+  { key: '' as const, label: '全部' },
+  { key: 'chinese' as const, label: '语文' },
+  { key: 'math' as const, label: '数学' },
+  { key: 'english' as const, label: '英语' }
+]
 
 const ORDER_STATUS: Record<OrderStatus, string> = {
   PENDING: '待家长审核',
@@ -186,6 +212,12 @@ const wrongList = ref<WrongQuestion[]>([])
 const tab = ref<TabKey>('orders')
 
 const stats = computed<Statistics>(() => data.value?.statistics ?? EMPTY_STAT)
+
+/* 错题本科目筛选：'' = 全部 */
+const wrongSubject = ref<'' | 'chinese' | 'math' | 'english'>('')
+const wrongFiltered = computed(() =>
+  wrongSubject.value === '' ? wrongList.value : wrongList.value.filter((w) => w.subject === wrongSubject.value)
+)
 
 function logout() {
   store.logout()
@@ -238,7 +270,7 @@ onMounted(async () => {
 
 .mp-chip {
   background: var(--warning-soft);
-  color: #a8680a;
+  color: #ffb347;
   font-size: 14px;
   padding: 3px 12px;
   border-radius: 999px;
@@ -281,11 +313,11 @@ onMounted(async () => {
   display: block;
   font-size: 26px;
   font-weight: 800;
-  color: var(--primary-dark);
+  color: #7be338;
 }
 
 .exhausted .tc-num {
-  color: #c97c00;
+  color: #ffb347;
 }
 
 .tc-label {
@@ -376,7 +408,7 @@ onMounted(async () => {
 .li-remark {
   margin-top: 4px;
   font-size: 14px;
-  color: #d84040;
+  color: #ff7a7a;
 }
 
 .order-status {
@@ -389,22 +421,22 @@ onMounted(async () => {
 
 .st-PENDING {
   background: var(--warning-soft);
-  color: #c97c00;
+  color: #ffb347;
 }
 
 .st-APPROVED {
   background: var(--primary-soft);
-  color: var(--primary-dark);
+  color: #7be338;
 }
 
 .st-REJECTED {
   background: var(--danger-soft);
-  color: #d84040;
+  color: #ff7a7a;
 }
 
 .st-DELIVERED {
   background: var(--success-soft);
-  color: #1d9c5a;
+  color: #7be338;
 }
 
 .amount {
@@ -414,11 +446,11 @@ onMounted(async () => {
 }
 
 .amount.plus {
-  color: #1d9c5a;
+  color: #7be338;
 }
 
 .amount.minus {
-  color: #d84040;
+  color: #ff7a7a;
 }
 
 .w-idx {
@@ -433,6 +465,51 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   margin-top: 2px;
+}
+
+/* 已掌握：整卡弱化 + 绿色标记 */
+.list-item.card.wrong.mastered {
+  opacity: 0.62;
+}
+
+/* 错题本科目筛选：与主 tab 同款，间距略紧 */
+.sub-tabs {
+  margin-bottom: 12px;
+}
+
+/* 科目标签 */
+.w-subject {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.w-subject.chinese {
+  background: rgba(255, 200, 0, 0.16);
+  color: #ffc800;
+}
+
+.w-subject.math {
+  background: rgba(36, 160, 237, 0.2);
+  color: #58b5f0;
+}
+
+.w-subject.english {
+  background: rgba(178, 108, 255, 0.2);
+  color: #c58fff;
+}
+
+.w-mastered {
+  flex: none;
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: rgba(88, 204, 2, 0.18);
+  color: #7be338;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .w-line {
@@ -453,7 +530,7 @@ onMounted(async () => {
 }
 
 .w-answer {
-  color: #1d9c5a;
+  color: #7be338;
   font-weight: 600;
 }
 </style>

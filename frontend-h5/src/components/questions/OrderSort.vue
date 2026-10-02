@@ -3,7 +3,7 @@
     <!-- 已排好的顺序 -->
     <div class="zone-title">
       我的顺序（点卡片可撤回）
-      <button v-if="modelValue.length > 0" class="reset" @click="emit('update:modelValue', [])">
+      <button v-if="modelValue.length > 0" class="reset" :disabled="disabled" @click="emit('update:modelValue', [])">
         重置
       </button>
     </div>
@@ -12,6 +12,7 @@
         v-for="(idx, pos) in modelValue"
         :key="`p-${idx}`"
         class="item picked-item"
+        :disabled="disabled"
         @click="removeAt(pos)"
       >
         <span class="pos">{{ pos + 1 }}</span>
@@ -28,6 +29,7 @@
         v-show="!modelValue.includes(idx)"
         :key="`o-${idx}`"
         class="item pool-item"
+        :disabled="disabled"
         @click="pick(idx)"
       >
         <span class="item-text">{{ opt }}</span>
@@ -37,14 +39,24 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ modelValue: number[]; options: string[] }>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: number[]
+    options: string[]
+    /** 反馈态：禁止改动 */
+    disabled?: boolean
+  }>(),
+  { disabled: false }
+)
 const emit = defineEmits<{ 'update:modelValue': [value: number[]] }>()
 
 function pick(idx: number) {
+  if (props.disabled) return
   emit('update:modelValue', [...props.modelValue, idx])
 }
 
 function removeAt(pos: number) {
+  if (props.disabled) return
   emit('update:modelValue', props.modelValue.filter((_, i) => i !== pos))
 }
 </script>
@@ -66,17 +78,21 @@ function removeAt(pos: number) {
 }
 
 .reset {
-  color: var(--primary);
+  color: var(--info-border);
   font-size: 14px;
-  min-height: 36px;
-  padding: 0 10px;
+  min-height: 48px;
+  padding: 0 12px;
+}
+
+.reset:disabled {
+  opacity: 0.5;
 }
 
 .picked {
   min-height: 60px;
-  border: 2.5px dashed var(--primary);
+  border: 2.5px dashed var(--info-border);
   border-radius: 16px;
-  background: var(--primary-soft);
+  background: var(--info-soft);
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -107,17 +123,23 @@ function removeAt(pos: number) {
   text-align: left;
   font-size: 17px;
   border: 2.5px solid var(--border);
-  background: #fbfcff;
+  background: var(--card-2);
+  color: var(--text-main);
   line-height: 1.4;
+  transition: transform 0.08s ease, border-color 0.12s ease;
 }
 
-.pool-item:active {
+.pool-item:not(:disabled):active {
   transform: scale(0.99);
 }
 
+.item:disabled {
+  cursor: default;
+}
+
 .picked-item {
-  border-color: var(--primary);
-  background: #fff;
+  border-color: var(--info-border);
+  background: var(--card-2);
 }
 
 .pos {
@@ -125,7 +147,7 @@ function removeAt(pos: number) {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--primary);
+  background: var(--info);
   color: #fff;
   font-weight: 800;
   display: inline-flex;

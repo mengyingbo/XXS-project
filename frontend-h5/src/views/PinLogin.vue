@@ -133,7 +133,8 @@ async function submit() {
   try {
     const data = await childApi.login({ childId: target.value.id, pin: pin.value })
     store.saveLogin(data.token, data.child)
-    router.replace('/map')
+    // v2.0：登录后先进科目选择页
+    router.replace('/subject')
   } catch (e) {
     fail((e as Error).message)
   } finally {
@@ -189,7 +190,7 @@ onBeforeUnmount(() => window.clearInterval(lockTimer))
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 3px solid #c4cde4;
+  border: 3px solid var(--border-light);
   background: transparent;
   transition: all 0.12s ease;
 }
@@ -234,7 +235,7 @@ onBeforeUnmount(() => window.clearInterval(lockTimer))
 }
 
 .msg-lock {
-  color: #c97c00;
+  color: #ffb347;
 }
 
 .keypad {
@@ -249,8 +250,8 @@ onBeforeUnmount(() => window.clearInterval(lockTimer))
 .key {
   min-height: 64px;
   border-radius: 18px;
-  background: #fff;
-  box-shadow: var(--shadow-card);
+  background: var(--card-2);
+  border: 1px solid var(--border);
   font-size: 28px;
   font-weight: 700;
   color: var(--text-main);

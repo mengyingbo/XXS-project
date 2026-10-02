@@ -28,10 +28,24 @@ http.interceptors.request.use((config) => {
   return config
 })
 
+/** 会话失效：清 token 并回档案选择页（后端过期返回 HTTP 200 + code 401，需两处都处理） */
+function handleUnauthorized() {
+  clearToken()
+  // hash 路由下路径在 location.hash；避免在档案选择/PIN 页循环跳转
+  const routePath = location.hash ? location.hash.replace(/^#/, '') : location.pathname
+  if (routePath !== '/pin' && routePath !== '/' && routePath !== '') {
+    location.replace('/')
+  }
+}
+
 http.interceptors.response.use(
   (resp) => {
     const body = resp.data as ApiResult<unknown>
     if (body && typeof body.code === 'number' && body.code !== 0 && body.code !== 200) {
+      // 业务码 401 = token 过期/无效（PIN 错误是 403，不在此列）
+      if (body.code === 401) {
+        handleUnauthorized()
+      }
       // 业务错误：保留 http 状态码语义，直接抛业务消息
       const err = new Error(body.message || '请求失败') as Error & { bizCode?: number }
       err.bizCode = body.code
@@ -44,11 +58,7 @@ http.interceptors.response.use(
     const status = error?.response?.status
     const body = error?.response?.data as ApiResult<unknown> | undefined
     if (status === 401) {
-      clearToken()
-      // 避免在登录页循环跳转
-      if (!location.pathname.startsWith('/pin') && location.pathname !== '/') {
-        location.replace('/')
-      }
+      handleUnauthorized()
     }
     const message = body?.message || error.message || '网络异常，请稍后再试'
     const err = new Error(message) as Error & { bizCode?: number; status?: number }

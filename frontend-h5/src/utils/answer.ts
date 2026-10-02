@@ -24,7 +24,8 @@ export const TYPE_LABEL: Record<QuestionType, string> = {
   SINGLE: '单选题',
   JUDGE: '判断题',
   BLANK: '填空题',
-  ORDER: '排一排'
+  ORDER: '排一排',
+  HAND: '写词语'
 }
 
 /** 结算详情里把答案值格式化成人看的文本 */
@@ -43,6 +44,7 @@ export function formatAnswerValue(
     case 'JUDGE':
       return value === true ? '✓ 正确' : '✗ 错误'
     case 'BLANK':
+    case 'HAND':
       return Array.isArray(value) ? value.join(' / ') : String(value)
     case 'ORDER': {
       if (!Array.isArray(value) || !options) return '（未作答）'

@@ -1,8 +1,22 @@
 <template>
-  <div class="page page-no-tab result-page" v-if="r">
+  <div class="result-page" v-if="r">
+    <!-- 通关彩屑（纯 CSS，无外部资源） -->
+    <div v-if="r.passed" class="confetti" aria-hidden="true">
+      <span
+        v-for="(c, i) in confettiPieces"
+        :key="i"
+        :style="{
+          left: c.left + '%',
+          background: c.color,
+          animationDelay: c.delay + 's',
+          animationDuration: c.duration + 's'
+        }"
+      ></span>
+    </div>
+
     <header class="r-head">
       <div class="r-level">{{ store.lastLevelName }}</div>
-      <div class="r-title">{{ r.passed ? '🎉 通关啦！' : '💪 再挑战一次吧' }}</div>
+      <div class="r-title">{{ r.passed ? '🎉 通关啦！' : '💪 再接再厉' }}</div>
     </header>
 
     <!-- 星级 -->
@@ -13,7 +27,7 @@
           :key="i"
           class="big-star"
           :class="{ on: i <= r.stars }"
-          :style="{ animationDelay: 0.25 * i + 0.1 + 's' }"
+          :style="{ animationDelay: 0.25 * i + 0.15 + 's' }"
         >★</span>
       </div>
       <div class="accuracy">正确率 {{ r.accuracy }}%</div>
@@ -23,14 +37,21 @@
       <div v-if="r.firstPass" class="r-tag tag-pass">✨ 首次通关</div>
     </div>
 
-    <!-- 积分 -->
-    <div class="points-card card">
-      <div class="gain">
-        <span class="gain-num">+{{ r.pointsGained }}</span>
-        <span class="gain-label">本关获得积分</span>
+    <!-- 多邻国式统计卡 -->
+    <div class="stat-card card">
+      <div class="stat-row">
+        <span class="sr-ico">💎</span>
+        <span class="sr-label">获得积分</span>
+        <span class="sr-value sr-points">+{{ r.pointsGained }}</span>
       </div>
-      <div class="breakdown">
-        <div v-if="r.pointsBreakdown.correct > 0" class="bd-row">
+
+      <!-- 积分明细（可折叠） -->
+      <button class="bd-toggle" @click="showBreakdown = !showBreakdown">
+        <span>积分明细</span>
+        <span class="bd-arrow" :class="{ up: showBreakdown }">⌄</span>
+      </button>
+      <div v-show="showBreakdown" class="breakdown">
+        <div class="bd-row">
           <span>答对 {{ r.correctCount }} 题</span>
           <span>+{{ r.pointsBreakdown.correct }}</span>
         </div>
@@ -39,7 +60,7 @@
           <span>+{{ r.pointsBreakdown.combo }}</span>
         </div>
         <div v-if="r.pointsBreakdown.passBonus > 0" class="bd-row">
-          <span>首次通关奖励</span>
+          <span>✨ 首次通关奖励</span>
           <span>+{{ r.pointsBreakdown.passBonus }}</span>
         </div>
         <div v-if="r.pointsBreakdown.threeStarBonus > 0" class="bd-row">
@@ -50,7 +71,19 @@
           <span>本关没有得分，答对题目就能拿积分哦</span>
         </div>
       </div>
-      <div class="balance">我的积分余额：<b>{{ r.points }}</b></div>
+
+      <div class="stat-row">
+        <span class="sr-ico">🎯</span>
+        <span class="sr-label">正确率</span>
+        <span class="sr-value">{{ r.accuracy }}%</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-ico">⏱️</span>
+        <span class="sr-label">用时</span>
+        <span class="sr-value">{{ durationText }}</span>
+      </div>
+
+      <div class="balance">💎 积分余额：<b>{{ r.points }}</b></div>
     </div>
 
     <!-- 错题回顾 -->
@@ -86,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useChildStore } from '@/stores/child'
 import { formatAnswerValue } from '@/utils/answer'
@@ -98,12 +131,34 @@ onMounted(() => {
   if (!store.lastResult) {
     router.replace('/map')
   }
+  window.scrollTo(0, 0)
 })
 
 const r = computed(() => store.lastResult)
 const wrongList = computed(() =>
   r.value ? r.value.details.filter((d) => !d.isCorrect) : []
 )
+
+const showBreakdown = ref(true)
+
+const durationText = computed(() => {
+  const totalSec = Math.max(0, Math.round(store.lastDurationMs / 1000))
+  const m = Math.floor(totalSec / 60)
+  const s = totalSec % 60
+  return m > 0 ? `${m}分${s}秒` : `${s}秒`
+})
+
+// 彩屑：固定一组伪随机样式，避免每次渲染跳动
+const CONFETTI_COLORS = ['#ffc800', '#58cc02', '#1cb0f6', '#ff4b4b', '#ff9600', '#ce82ff']
+const confettiPieces = Array.from({ length: 22 }, (_, i) => {
+  const v = (i * 37 + 11) % 100
+  return {
+    left: (v * 0.9 + 2) % 100,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    delay: ((i * 13) % 20) / 10,
+    duration: 2.4 + ((i * 7) % 14) / 10
+  }
+})
 
 function retry() {
   if (r.value) router.replace(`/play/${r.value.levelId}`)
@@ -120,10 +175,49 @@ function backMap() {
 
 <style scoped>
 .result-page {
+  position: relative;
   max-width: 640px;
-  padding-top: 20px;
+  margin: 0 auto;
+  padding: 28px 18px 40px;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
+/* ---------- 彩屑 ---------- */
+.confetti {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70vh;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti span {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 14px;
+  border-radius: 3px;
+  opacity: 0.9;
+  animation-name: confetti-fall;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(72vh) rotate(540deg);
+    opacity: 0.2;
+  }
+}
+
+/* ---------- 标题 ---------- */
 .r-head {
   text-align: center;
   margin-bottom: 16px;
@@ -135,33 +229,35 @@ function backMap() {
 }
 
 .r-title {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 800;
   margin-top: 4px;
 }
 
+/* ---------- 星级 ---------- */
 .stars-card {
   text-align: center;
-  padding: 24px 20px 20px;
+  padding: 26px 20px 22px;
 }
 
 .big-stars {
   display: flex;
   justify-content: center;
-  gap: 14px;
-  margin-bottom: 12px;
+  gap: 16px;
+  margin-bottom: 14px;
 }
 
 .big-star {
-  font-size: 60px;
-  color: #dfe4f0;
+  font-size: 64px;
+  line-height: 1;
+  color: #46545e;
   transform: scale(0.4);
   opacity: 0;
 }
 
 .big-star.on {
   color: var(--star);
-  text-shadow: 0 4px 12px rgba(255, 197, 49, 0.5);
+  text-shadow: 0 4px 12px rgba(255, 200, 0, 0.5);
   animation: star-pop 0.45s cubic-bezier(0.2, 1.4, 0.5, 1) forwards;
 }
 
@@ -171,7 +267,7 @@ function backMap() {
     opacity: 0;
   }
   70% {
-    transform: scale(1.15);
+    transform: scale(1.18);
     opacity: 1;
   }
   100% {
@@ -192,7 +288,7 @@ function backMap() {
 }
 
 .count-line b {
-  color: var(--success);
+  color: #7be338;
 }
 
 .r-tag {
@@ -206,48 +302,85 @@ function backMap() {
 
 .tag-pass {
   background: var(--warning-soft);
-  color: #c97c00;
+  color: var(--gold);
 }
 
-.points-card {
+/* ---------- 统计卡 ---------- */
+.stat-card {
   margin-top: 14px;
-  padding: 20px;
+  padding: 6px 20px 16px;
 }
 
-.gain {
+.stat-row {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  justify-content: center;
-  padding-bottom: 14px;
-  border-bottom: 1px dashed var(--border);
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
 }
 
-.gain-num {
-  font-size: 40px;
+.sr-ico {
+  flex: none;
+  font-size: 22px;
+  width: 30px;
+  text-align: center;
+}
+
+.sr-label {
+  flex: 1;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.sr-value {
+  font-size: 19px;
   font-weight: 800;
-  color: #c97c00;
 }
 
-.gain-label {
-  color: var(--text-sub);
-  font-size: 16px;
+.sr-points {
+  color: #7be338;
+}
+
+.bd-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  color: var(--info-border);
+  font-size: 15px;
+  font-weight: 700;
+  min-height: 48px;
+}
+
+.bd-arrow {
+  display: inline-block;
+  font-size: 18px;
+  transition: transform 0.18s ease;
+}
+
+.bd-arrow.up {
+  transform: rotate(180deg);
 }
 
 .breakdown {
-  padding: 12px 0 4px;
+  padding: 0 0 10px 42px;
 }
 
 .bd-row {
   display: flex;
   justify-content: space-between;
-  padding: 6px 4px;
-  font-size: 16px;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 15px;
+  color: var(--text-sub);
 }
 
 .bd-row span:last-child {
   font-weight: 700;
-  color: #c97c00;
+  color: #7be338;
+  flex: none;
 }
 
 .empty-gain span {
@@ -258,8 +391,7 @@ function backMap() {
   text-align: right;
   color: var(--text-sub);
   font-size: 15px;
-  padding-top: 10px;
-  border-top: 1px dashed var(--border);
+  padding-top: 14px;
 }
 
 .balance b {
@@ -267,6 +399,7 @@ function backMap() {
   font-size: 18px;
 }
 
+/* ---------- 错题回顾 ---------- */
 .wrong-card {
   margin-top: 14px;
 }
@@ -277,8 +410,12 @@ function backMap() {
 }
 
 .wrong-item {
-  border-top: 1px dashed var(--border);
+  border-top: 1px solid var(--border);
   padding: 14px 0;
+}
+
+.wrong-item:first-of-type {
+  border-top: none;
 }
 
 .wr-stem {
@@ -296,7 +433,7 @@ function backMap() {
   height: 24px;
   border-radius: 50%;
   background: var(--danger-soft);
-  color: var(--danger);
+  color: #ff7a7a;
   font-size: 14px;
   display: inline-flex;
   align-items: center;
@@ -319,18 +456,18 @@ function backMap() {
 }
 
 .wr-wrong {
-  color: #d84040;
+  color: #ff7a7a;
   flex: 1;
 }
 
 .wr-right {
-  color: #1d9c5a;
+  color: #7be338;
   flex: 1;
 }
 
 .wr-analysis {
   margin-top: 6px;
-  background: #f7f9ff;
+  background: var(--card-2);
   border-radius: 10px;
   padding: 8px 12px;
   font-size: 15px;
@@ -343,17 +480,30 @@ function backMap() {
   text-align: center;
   font-size: 20px;
   font-weight: 700;
-  color: #1d9c5a;
+  color: #7be338;
   padding: 28px 20px;
 }
 
+/* ---------- 操作按钮 ---------- */
 .r-actions {
   display: flex;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .r-actions .btn {
   flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti span,
+  .big-star.on {
+    animation: none;
+  }
+
+  .big-star.on {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>

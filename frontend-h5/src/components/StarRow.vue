@@ -23,7 +23,7 @@ withDefaults(
 }
 
 .star {
-  color: #d7dcea;
+  color: #46545e;
   transition: color 0.2s ease;
 }
 

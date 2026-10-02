@@ -15,8 +15,8 @@ const props = withDefaults(
   { avatar: '', size: 'md' }
 )
 
-// 按 emoji 码点稳定取一个柔和底色
-const palettes = ['#ffe8ec', '#e4f1ff', '#e7f9ee', '#fff3da', '#f0e8ff', '#e0f7f5']
+// 按 emoji 码点稳定取一个深色柔和底色（深色主题，保留色相区分）
+const palettes = ['#3a2630', '#24344a', '#22382a', '#3d3320', '#2e2942', '#1f3a3a']
 const bgStyle = computed(() => {
   const code = (props.avatar || '🧒').codePointAt(0) ?? 0
   return { background: palettes[code % palettes.length] }

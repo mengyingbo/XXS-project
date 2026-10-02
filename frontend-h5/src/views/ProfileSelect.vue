@@ -1,8 +1,8 @@
 <template>
   <div class="page page-no-tab select-page">
     <header class="hero">
-      <div class="hero-emoji">📖✨</div>
-      <h1 class="hero-title">语文知识闯关</h1>
+      <div class="hero-emoji">🎒✨</div>
+      <h1 class="hero-title">知识闯关</h1>
       <p class="hero-sub">选一个你的档案，开始今天的冒险吧！</p>
     </header>
 
@@ -30,6 +30,16 @@
           <span class="go">第一次来？</span>
         </button>
       </div>
+
+      <!-- 游戏乐园入口（v2.1，免登录） -->
+      <button class="games-entry" @click="router.push('/games')">
+        <span class="ge-icons">🚂 🧩 🐍 🔢 🐉</span>
+        <span class="ge-text">
+          <span class="ge-title">游戏乐园</span>
+          <span class="ge-sub">华容道 · 拼图 · 贪吃蛇 · 数独 · 成语接龙</span>
+        </span>
+        <span class="ge-arrow">›</span>
+      </button>
     </template>
 
     <!-- 新建档案弹窗 -->
@@ -238,9 +248,9 @@ onMounted(load)
 
 .add-card {
   border-style: dashed;
-  border-color: var(--border);
+  border-color: var(--border-light);
   box-shadow: none;
-  background: #fbfcff;
+  background: var(--card-2);
 }
 
 .add-ico {
@@ -255,6 +265,54 @@ onMounted(load)
   justify-content: center;
 }
 
+/* ---- 游戏乐园入口（v2.1） ---- */
+.games-entry {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 720px;
+  margin: 22px auto 0;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: linear-gradient(120deg, rgba(123, 227, 56, 0.1), rgba(64, 158, 255, 0.1));
+  border: 1px dashed var(--border-light);
+  text-align: left;
+  transition: transform 0.12s ease;
+}
+
+.games-entry:active {
+  transform: scale(0.98);
+}
+
+.ge-icons {
+  font-size: 24px;
+  letter-spacing: 2px;
+  flex: none;
+}
+
+.ge-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ge-title {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.ge-sub {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+.ge-arrow {
+  font-size: 26px;
+  color: var(--text-sub);
+}
+
 .avatar-pick {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -264,7 +322,7 @@ onMounted(load)
 .avatar-opt {
   min-height: var(--min-tap);
   border-radius: 14px;
-  background: #f3f6fd;
+  background: var(--card-2);
   font-size: 26px;
   border: 2px solid transparent;
 }

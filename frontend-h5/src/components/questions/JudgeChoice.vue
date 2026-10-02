@@ -1,16 +1,26 @@
 <template>
   <div class="judge-opts">
     <button
-      class="judge-btn j-true"
-      :class="{ on: modelValue === true }"
+      class="judge-btn"
+      :class="{
+        on: !reveal && modelValue === true,
+        'is-correct': reveal && correctValue === true,
+        'is-wrong': reveal && modelValue === true && correctValue !== true
+      }"
+      :disabled="disabled"
       @click="emit('update:modelValue', true)"
     >
       <span class="j-ico">✓</span>
       <span>正确</span>
     </button>
     <button
-      class="judge-btn j-false"
-      :class="{ on: modelValue === false }"
+      class="judge-btn"
+      :class="{
+        on: !reveal && modelValue === false,
+        'is-correct': reveal && correctValue === false,
+        'is-wrong': reveal && modelValue === false && correctValue !== false
+      }"
+      :disabled="disabled"
       @click="emit('update:modelValue', false)"
     >
       <span class="j-ico">✗</span>
@@ -20,7 +30,18 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{ modelValue: boolean | null }>()
+withDefaults(
+  defineProps<{
+    modelValue: boolean | null
+    /** 反馈态：禁止改答案 */
+    disabled?: boolean
+    /** 反馈态：揭示对错 */
+    reveal?: boolean
+    /** reveal 时的正确判断值 */
+    correctValue?: boolean | null
+  }>(),
+  { disabled: false, reveal: false, correctValue: null }
+)
 const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 </script>
 
@@ -35,7 +56,8 @@ const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
   min-height: 110px;
   border-radius: 18px;
   border: 2.5px solid var(--border);
-  background: #fbfcff;
+  background: var(--card-2);
+  color: var(--text-main);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,19 +73,31 @@ const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
   line-height: 1;
 }
 
-.judge-btn:active {
+.judge-btn:not(:disabled):active {
   transform: scale(0.97);
 }
 
-.j-true.on {
-  border-color: var(--success);
-  background: var(--success-soft);
-  color: #1d9c5a;
+.judge-btn:disabled {
+  cursor: default;
 }
 
-.j-false.on {
+/* 作答中：信息蓝选中态（不提前暗示对错） */
+.judge-btn.on {
+  border-color: var(--info-border);
+  background: var(--info-soft);
+  color: var(--info-border);
+}
+
+/* 反馈态 */
+.judge-btn.is-correct {
+  border-color: var(--success);
+  background: var(--success-soft);
+  color: #7be338;
+}
+
+.judge-btn.is-wrong {
   border-color: var(--danger);
   background: var(--danger-soft);
-  color: #d84040;
+  color: #ff7a7a;
 }
 </style>

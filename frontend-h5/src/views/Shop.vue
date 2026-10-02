@@ -175,13 +175,13 @@ onMounted(load)
   display: block;
   font-size: 24px;
   font-weight: 800;
-  color: #c97c00;
+  color: #ffb347;
   line-height: 1.2;
 }
 
 .points-label {
   font-size: 13px;
-  color: #c97c00;
+  color: #ffb347;
 }
 
 .grid {
@@ -201,7 +201,7 @@ onMounted(load)
   position: relative;
   height: 130px;
   border-radius: 14px;
-  background: #f3f6fd;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -254,7 +254,7 @@ onMounted(load)
 .cost {
   font-size: 19px;
   font-weight: 800;
-  color: #c97c00;
+  color: #ffb347;
 }
 
 .stock {
@@ -267,8 +267,8 @@ onMounted(load)
 }
 
 .btn-disabled {
-  background: #c6cde0;
-  color: #fff;
+  background: #3c484f;
+  color: #8fa0aa;
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -282,7 +282,7 @@ onMounted(load)
   width: 110px;
   height: 110px;
   border-radius: 16px;
-  background: #f3f6fd;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -306,7 +306,7 @@ onMounted(load)
 }
 
 .cp-cost {
-  color: #c97c00;
+  color: #ffb347;
   font-weight: 700;
   margin-top: 4px;
 }
