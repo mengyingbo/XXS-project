@@ -8,6 +8,13 @@
         </div>
         <el-table :data="units" v-loading="loading" border stripe>
           <el-table-column prop="id" label="ID" width="70" />
+          <el-table-column label="科目" width="80">
+            <template #default="{ row }">
+              <el-tag size="small" :type="row.subject === 'math' ? 'primary' : row.subject === 'english' ? 'warning' : 'success'">
+                {{ SUBJECT_LABEL[row.subject] ?? row.subject }}
+              </el-tag>
+            </template>
+          </el-table-column>
           <el-table-column prop="unitNo" label="单元号" width="90" />
           <el-table-column prop="title" label="标题" min-width="180" />
           <el-table-column prop="description" label="说明" min-width="240" show-overflow-tooltip />
@@ -24,8 +31,8 @@
       <!-- ==================== 课文 ==================== -->
       <el-tab-pane label="课文 / 语文园地" name="lesson">
         <div class="toolbar">
-          <el-select v-model="lessonUnitId" placeholder="全部单元" clearable style="width: 220px" @change="loadLessons">
-            <el-option v-for="u in units" :key="u.id" :label="`第${u.unitNo}单元 ${u.title}`" :value="u.id" />
+          <el-select v-model="lessonUnitId" placeholder="全部单元" clearable style="width: 260px" @change="loadLessons">
+            <el-option v-for="u in units" :key="u.id" :label="`[${SUBJECT_LABEL[u.subject] ?? u.subject}] 第${u.unitNo}单元 ${u.title}`" :value="u.id" />
           </el-select>
           <el-button type="primary" @click="openLesson()">新增课文</el-button>
         </div>
@@ -35,8 +42,8 @@
           <el-table-column prop="title" label="标题" min-width="180" />
           <el-table-column label="类型" width="110">
             <template #default="{ row }">
-              <el-tag :type="row.lessonType === 'GARDEN' ? 'warning' : 'primary'">
-                {{ row.lessonType === 'GARDEN' ? '语文园地' : '课文' }}
+              <el-tag :type="row.lessonType === 'GARDEN' ? 'warning' : row.lessonType === 'TEXT' ? 'primary' : 'success'">
+                {{ LESSON_TYPE_LABEL[row.lessonType] ?? row.lessonType }}
               </el-tag>
             </template>
           </el-table-column>
@@ -84,6 +91,13 @@
     <!-- 单元编辑 -->
     <el-dialog v-model="unitOpen" :title="unitForm.id ? '编辑单元' : '新增单元'" width="460px">
       <el-form :model="unitForm" label-width="90px">
+        <el-form-item label="科目" required>
+          <el-radio-group v-model="unitForm.subject">
+            <el-radio value="chinese">语文</el-radio>
+            <el-radio value="math">数学</el-radio>
+            <el-radio value="english">英语</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="单元号" required><el-input-number v-model="unitForm.unitNo" :min="1" :max="20" /></el-form-item>
         <el-form-item label="标题" required><el-input v-model="unitForm.title" maxlength="50" /></el-form-item>
         <el-form-item label="说明"><el-input v-model="unitForm.description" type="textarea" :rows="2" /></el-form-item>
@@ -109,6 +123,8 @@
           <el-radio-group v-model="lessonForm.lessonType">
             <el-radio value="TEXT">课文</el-radio>
             <el-radio value="GARDEN">语文园地</el-radio>
+            <el-radio value="PRACTICE">综合实践</el-radio>
+            <el-radio value="FUN">数学好玩</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="略读"><el-switch v-model="lessonForm.isSkim" /></el-form-item>
@@ -163,11 +179,25 @@ const unitOpen = ref(false)
 const lessonOpen = ref(false)
 const levelOpen = ref(false)
 
-const unitForm = reactive({ id: 0, unitNo: 1, title: '', description: '', sortOrder: 0 })
-const lessonForm = reactive({ id: 0, unitId: 1, lessonNo: 1, title: '', lessonType: 'TEXT' as 'TEXT' | 'GARDEN', isSkim: false, sortOrder: 0 })
+const unitForm = reactive({ id: 0, subject: 'chinese' as string, unitNo: 1, title: '', description: '', sortOrder: 0 })
+const lessonForm = reactive({ id: 0, unitId: 1, lessonNo: 1, title: '', lessonType: 'TEXT' as 'TEXT' | 'GARDEN' | 'PRACTICE' | 'FUN', isSkim: false, sortOrder: 0 })
 const levelForm = reactive({ id: 0, lessonId: 1, levelNo: 1, name: '', questionCount: 5, sortOrder: 0 })
 
 const lessonTitle = (id: number) => allLessons.value.find((l) => l.id === id)?.title ?? `课文#${id}`
+
+const LESSON_TYPE_LABEL: Record<string, string> = {
+  TEXT: '课文',
+  GARDEN: '语文园地',
+  PRACTICE: '综合实践',
+  FUN: '数学好玩'
+}
+
+/** 科目显示名（v2.6：三科） */
+const SUBJECT_LABEL: Record<string, string> = {
+  chinese: '语文',
+  math: '数学',
+  english: '英语'
+}
 
 async function loadUnits() {
   units.value = await adminApi.unitList()
@@ -193,8 +223,8 @@ async function loadLevels() {
 
 function openUnit(row?: Unit) {
   Object.assign(unitForm, row
-    ? { id: row.id, unitNo: row.unitNo, title: row.title, description: row.description, sortOrder: row.sortOrder }
-    : { id: 0, unitNo: units.value.length + 1, title: '', description: '', sortOrder: units.value.length })
+    ? { id: row.id, subject: row.subject ?? 'chinese', unitNo: row.unitNo, title: row.title, description: row.description, sortOrder: row.sortOrder }
+    : { id: 0, subject: 'chinese', unitNo: units.value.length + 1, title: '', description: '', sortOrder: units.value.length })
   unitOpen.value = true
 }
 
@@ -205,7 +235,7 @@ async function saveUnit() {
   }
   saving.value = true
   try {
-    const data = { unitNo: unitForm.unitNo, title: unitForm.title.trim(), description: unitForm.description, sortOrder: unitForm.sortOrder }
+    const data = { subject: unitForm.subject, unitNo: unitForm.unitNo, title: unitForm.title.trim(), description: unitForm.description, sortOrder: unitForm.sortOrder }
     if (unitForm.id) await adminApi.unitUpdate(unitForm.id, data)
     else await adminApi.unitCreate(data)
     ElMessage.success('已保存')

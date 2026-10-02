@@ -1,8 +1,13 @@
 <template>
   <el-card>
     <div class="toolbar">
+      <el-select v-model="filter.subject" placeholder="按科目筛选" clearable style="width: 130px" @change="onSubjectFilter">
+        <el-option label="语文" value="chinese" />
+        <el-option label="数学" value="math" />
+        <el-option label="英语" value="english" />
+      </el-select>
       <el-select v-model="filter.lessonId" placeholder="按课文筛选" clearable filterable style="width: 220px" @change="onLessonFilter">
-        <el-option v-for="l in allLessons" :key="l.id" :label="l.title" :value="l.id" />
+        <el-option v-for="l in filterLessons" :key="l.id" :label="l.title" :value="l.id" />
       </el-select>
       <el-select v-model="filter.levelId" placeholder="按关卡筛选" clearable style="width: 180px" :disabled="!filter.lessonId">
         <el-option v-for="lv in filterLevels" :key="lv.id" :label="`${lv.levelNo}关 ${lv.name || ''}`" :value="lv.id" />
@@ -12,6 +17,7 @@
         <el-option label="判断题" value="JUDGE" />
         <el-option label="填空题" value="BLANK" />
         <el-option label="排序题" value="ORDER" />
+        <el-option label="词语手写" value="HAND" />
       </el-select>
       <el-input v-model="filter.keyword" placeholder="题干关键词" clearable style="width: 200px" @keyup.enter="load(1)" @clear="load(1)" />
       <el-button type="primary" @click="load(1)">查询</el-button>
@@ -84,6 +90,7 @@
                 <el-option label="判断题" value="JUDGE" />
                 <el-option label="填空题" value="BLANK" />
                 <el-option label="排序题" value="ORDER" />
+                <el-option label="词语手写" value="HAND" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -129,8 +136,8 @@
           </el-radio-group>
         </el-form-item>
 
-        <!-- BLANK：可接受答案 -->
-        <el-form-item v-if="form.type === 'BLANK'" label="参考答案" required>
+        <!-- BLANK / HAND：可接受答案 -->
+        <el-form-item v-if="form.type === 'BLANK' || form.type === 'HAND'" label="参考答案" required>
           <div class="options-box">
             <div class="hint">可填多个可接受答案（判分忽略空格/标点/大小写）</div>
             <div v-for="(_, i) in blankAnswers" :key="i" class="option-row">
@@ -171,7 +178,7 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { adminApi } from '@/api/admin'
 import { QUESTION_TYPE_LABEL as TYPE_LABEL, fmtAnswer } from '@/utils/format'
-import type { Level, Lesson, Question, QuestionType } from '@/types/api'
+import type { Level, Lesson, Question, QuestionType, Unit } from '@/types/api'
 
 const list = ref<Question[]>([])
 const total = ref(0)
@@ -182,9 +189,20 @@ const saving = ref(false)
 
 const allLessons = ref<Lesson[]>([])
 const allLevels = ref<Level[]>([])
+const allUnits = ref<Unit[]>([])
 
-const filter = reactive<{ lessonId?: number; levelId?: number; type?: QuestionType | ''; keyword: string }>({ keyword: '' })
+const filter = reactive<{ subject?: string; lessonId?: number; levelId?: number; type?: QuestionType | ''; keyword: string }>({ keyword: '' })
+/** 课文筛选下拉按科目联动（v2.0） */
+const filterLessons = computed(() =>
+  filter.subject ? allLessons.value.filter((l) => lessonSubject(l.id) === filter.subject) : allLessons.value
+)
 const filterLevels = computed(() => (filter.lessonId ? allLevels.value.filter((l) => l.lessonId === filter.lessonId) : []))
+
+function lessonSubject(lessonId: number): string | undefined {
+  const lesson = allLessons.value.find((l) => l.id === lessonId)
+  const unit = lesson ? allUnits.value.find((u) => u.id === lesson.unitId) : undefined
+  return unit?.subject
+}
 
 const editOpen = ref(false)
 const formLevels = ref<Level[]>([])
@@ -215,6 +233,7 @@ async function load(targetPage?: number) {
     const data = await adminApi.questionList({
       page: page.value,
       size: size.value,
+      subject: filter.subject || undefined,
       lessonId: filter.lessonId || undefined,
       levelId: filter.levelId || undefined,
       type: filter.type || undefined,
@@ -225,6 +244,12 @@ async function load(targetPage?: number) {
   } finally {
     loading.value = false
   }
+}
+
+function onSubjectFilter() {
+  filter.lessonId = undefined
+  filter.levelId = undefined
+  load(1)
 }
 
 function onLessonFilter() {
@@ -293,7 +318,7 @@ function openEdit(row: Question) {
       form.singleAnswer = typeof answer === 'number' ? answer : 0
     } else if (form.type === 'JUDGE') {
       form.judgeAnswer = answer === true
-    } else if (form.type === 'BLANK') {
+    } else if (form.type === 'BLANK' || form.type === 'HAND') {
       blankAnswers.value = Array.isArray(answer) ? (answer as string[]) : [String(answer)]
       if (blankAnswers.value.length === 0) blankAnswers.value = ['']
     } else if (form.type === 'ORDER') {
@@ -318,7 +343,7 @@ function serialize() {
     answer = JSON.stringify(form.singleAnswer)
   } else if (form.type === 'JUDGE') {
     answer = JSON.stringify(form.judgeAnswer)
-  } else if (form.type === 'BLANK') {
+  } else if (form.type === 'BLANK' || form.type === 'HAND') {
     const answers = blankAnswers.value.map((s) => s.trim()).filter((s) => s !== '')
     answer = answers.length === 1 ? JSON.stringify(answers[0]) : JSON.stringify(answers)
   } else {
@@ -348,7 +373,7 @@ function validate(): string {
     const opts = optionList.value.map((s) => s.trim())
     if (opts.length < 2 || opts.some((s) => s === '')) return '排序题需至少 2 个非空待排序项'
     if (orderAnswer.value.length !== opts.length) return '请设置完整正确顺序'
-  } else if (form.type === 'BLANK') {
+  } else if (form.type === 'BLANK' || form.type === 'HAND') {
     if (blankAnswers.value.every((s) => s.trim() === '')) return '请填写至少一个参考答案'
   }
   return ''
@@ -386,9 +411,10 @@ function del(row: Question) {
 onMounted(async () => {
   loading.value = true
   try {
-    const [lessons, levels] = await Promise.all([adminApi.lessonList(), adminApi.levelList()])
+    const [lessons, levels, units] = await Promise.all([adminApi.lessonList(), adminApi.levelList(), adminApi.unitList()])
     allLessons.value = lessons
     allLevels.value = levels
+    allUnits.value = units
     await load()
   } finally {
     loading.value = false

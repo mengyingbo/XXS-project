@@ -33,13 +33,19 @@ http.interceptors.response.use(
   (resp) => {
     const body = resp.data as ApiResult<unknown>
     if (body && typeof body.code === 'number' && body.code !== 0 && body.code !== 200) {
-      const err = new Error(body.message || '请求失败') as Error & { bizCode?: number }
-      err.bizCode = body.code
-      // 后端业务错误统一 HTTP 200 + code≠0：全局弹出提示（登录页自己内联展示，跳过避免重复）
+      // 后端业务错误统一 HTTP 200 + code≠0（登录页自己内联展示，跳过避免重复）
       const reqUrl: string = resp.config?.url ?? ''
-      if (reqUrl !== '/login') {
+      if (body.code === 401 && reqUrl !== '/login') {
+        // 业务码 401 = 会话过期/无效：清 token 回登录页（与 HTTP 401 同处理）
+        clearToken()
+        if (!location.hash.startsWith('#/login')) {
+          location.href = '/admin/'
+        }
+      } else if (reqUrl !== '/login') {
         ElMessage.error(body.message || '请求失败')
       }
+      const err = new Error(body.message || '请求失败') as Error & { bizCode?: number }
+      err.bizCode = body.code
       return Promise.reject(err)
     }
     return resp

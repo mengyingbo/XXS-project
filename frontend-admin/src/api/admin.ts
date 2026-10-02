@@ -1,4 +1,4 @@
-import { request } from './http'
+﻿import { request } from './http'
 import type {
   AdjustPointsResult,
   Child,
@@ -68,10 +68,10 @@ export const adminApi = {
   unitList(): Promise<Unit[]> {
     return request({ url: '/unit', method: 'GET' })
   },
-  unitCreate(data: { unitNo: number; title: string; description?: string; sortOrder?: number }): Promise<Unit> {
+  unitCreate(data: { subject?: string; unitNo: number; title: string; description?: string; sortOrder?: number }): Promise<Unit> {
     return request({ url: '/unit', method: 'POST', data })
   },
-  unitUpdate(id: number, data: { unitNo: number; title: string; description?: string; sortOrder?: number }): Promise<Unit> {
+  unitUpdate(id: number, data: { subject?: string; unitNo: number; title: string; description?: string; sortOrder?: number }): Promise<Unit> {
     return request({ url: `/unit/${id}`, method: 'PUT', data })
   },
   unitDelete(id: number): Promise<void> {
@@ -85,7 +85,7 @@ export const adminApi = {
     unitId: number
     lessonNo: number
     title: string
-    lessonType: 'TEXT' | 'GARDEN'
+    lessonType: 'TEXT' | 'GARDEN' | 'PRACTICE' | 'FUN'
     isSkim?: boolean
     sortOrder?: number
   }): Promise<Lesson> {
@@ -95,7 +95,7 @@ export const adminApi = {
     unitId: number
     lessonNo: number
     title: string
-    lessonType: 'TEXT' | 'GARDEN'
+    lessonType: 'TEXT' | 'GARDEN' | 'PRACTICE' | 'FUN'
     isSkim?: boolean
     sortOrder?: number
   }): Promise<Lesson> {
@@ -126,6 +126,7 @@ export const adminApi = {
     levelId?: number
     type?: QuestionType | ''
     keyword?: string
+    subject?: string
   }): Promise<PageData<Question>> {
     return request({ url: '/question', method: 'GET', params })
   },

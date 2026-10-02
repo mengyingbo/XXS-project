@@ -23,7 +23,8 @@ export const QUESTION_TYPE_LABEL: Record<string, string> = {
   SINGLE: '单选题',
   JUDGE: '判断题',
   BLANK: '填空题',
-  ORDER: '排序题'
+  ORDER: '排序题',
+  HAND: '词语手写'
 }
 
 /** 把答案/选项 JSON 字符串格式化成可读文本 */

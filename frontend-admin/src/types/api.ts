@@ -43,6 +43,8 @@ export interface Child {
 
 export interface Unit {
   id: number
+  /** 科目（v2.0）：chinese 语文 / math 数学 */
+  subject: string
   unitNo: number
   title: string
   description: string
@@ -54,8 +56,8 @@ export interface Lesson {
   unitId: number
   lessonNo: number
   title: string
-  /** TEXT 课文 / GARDEN 语文园地 */
-  lessonType: 'TEXT' | 'GARDEN'
+  /** TEXT 课文 / GARDEN 语文园地 / PRACTICE 综合实践 / FUN 数学好玩 */
+  lessonType: 'TEXT' | 'GARDEN' | 'PRACTICE' | 'FUN'
   isSkim: boolean
   sortOrder: number
 }
@@ -69,7 +71,7 @@ export interface Level {
   sortOrder: number
 }
 
-export type QuestionType = 'SINGLE' | 'JUDGE' | 'BLANK' | 'ORDER'
+export type QuestionType = 'SINGLE' | 'JUDGE' | 'BLANK' | 'ORDER' | 'HAND'
 
 export interface Question {
   id: number
