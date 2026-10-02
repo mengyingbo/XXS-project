@@ -58,13 +58,14 @@ CREATE TABLE `child` (
 DROP TABLE IF EXISTS `unit`;
 CREATE TABLE `unit` (
   `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `subject`     VARCHAR(10)     NOT NULL DEFAULT 'chinese' COMMENT '科目：chinese语文 / math数学（v2.0）',
   `unit_no`     TINYINT         NOT NULL                COMMENT '单元序号 1~8',
   `title`       VARCHAR(50)     NOT NULL                COMMENT '单元标题',
   `description` VARCHAR(255)    NOT NULL DEFAULT ''     COMMENT '单元说明',
   `sort_order`  INT             NOT NULL DEFAULT 0      COMMENT '排序值',
   `created_at`  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_unit_no` (`unit_no`)
+  UNIQUE KEY `uk_subject_unit_no` (`subject`, `unit_no`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '单元';
 
 -- -------------------------------------------------------------
@@ -76,7 +77,7 @@ CREATE TABLE `lesson` (
   `unit_id`     BIGINT UNSIGNED NOT NULL                COMMENT '所属单元 id',
   `lesson_no`   TINYINT         NOT NULL                COMMENT '课文序号（语文园地记为 0）',
   `title`       VARCHAR(50)     NOT NULL                COMMENT '课文标题',
-  `lesson_type` VARCHAR(20)     NOT NULL DEFAULT 'TEXT' COMMENT '类型：TEXT课文 / GARDEN语文园地',
+  `lesson_type` VARCHAR(20)     NOT NULL DEFAULT 'TEXT' COMMENT '类型：TEXT课文 / GARDEN语文园地 / PRACTICE综合实践 / FUN数学好玩（v2.0）',
   `is_skim`     TINYINT(1)      NOT NULL DEFAULT 0      COMMENT '是否略读课文（目录带 *）：0否 1是',
   `sort_order`  INT             NOT NULL DEFAULT 0      COMMENT '排序值',
   `created_at`  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
