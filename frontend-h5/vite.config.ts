@@ -26,7 +26,9 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8080',
+        // 本地起后端时用默认 127.0.0.1:8080；不想起后端时可指定服务器，如
+        // PowerShell: $env:XXS_API_TARGET='http://192.168.110.99'; npm run dev
+        target: process.env.XXS_API_TARGET || 'http://127.0.0.1:8080',
         changeOrigin: true
       }
     }

@@ -123,15 +123,27 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useChildStore } from '@/stores/child'
 import { formatAnswerValue } from '@/utils/answer'
+import { sfxComplete, sfxEncourage } from '@/utils/sfx'
 
 const router = useRouter()
 const store = useChildStore()
 
 onMounted(() => {
-  if (!store.lastResult) {
+  const res = store.lastResult
+  if (!res) {
     router.replace('/map')
+    return
   }
   window.scrollTo(0, 0)
+  // 结算音效：等首屏渲染出来再播，通关琶音 / 未通关温柔鼓励
+  window.setTimeout(() => {
+    if (store.lastResult !== res) return
+    if (res.passed) {
+      sfxComplete()
+    } else {
+      sfxEncourage()
+    }
+  }, 150)
 })
 
 const r = computed(() => store.lastResult)

@@ -21,6 +21,20 @@
         <button class="logout" @click="logout">退出</button>
       </header>
 
+      <!-- 答题音效开关（家长可静音） -->
+      <div class="sfx-row card">
+        <span class="sfx-txt"><span class="sfx-ico">🔔</span>答题音效</span>
+        <button
+          class="sfx-switch"
+          role="switch"
+          :aria-checked="sfxOn"
+          :class="{ on: sfxOn }"
+          @click="toggleSfx"
+        >
+          <span class="knob"></span>
+        </button>
+      </div>
+
       <!-- 今日已学（F-H5-10） -->
       <div class="today card" :class="{ exhausted: store.today?.limitReached }">
         <div class="today-title">
@@ -158,6 +172,7 @@ import { childApi } from '@/api/child'
 import { useChildStore } from '@/stores/child'
 import { showToast } from '@/composables/useToast'
 import { formatAnswerValue, TYPE_LABEL } from '@/utils/answer'
+import { setSfxEnabled, sfxEnabled, sfxTap } from '@/utils/sfx'
 import type { OrderStatus, RecordsData, Statistics, WrongQuestion } from '@/types/api'
 
 const router = useRouter()
@@ -224,6 +239,14 @@ function logout() {
   router.replace('/')
 }
 
+/* 答题音效开关 */
+const sfxOn = ref(sfxEnabled())
+function toggleSfx() {
+  sfxOn.value = !sfxOn.value
+  setSfxEnabled(sfxOn.value)
+  if (sfxOn.value) sfxTap() // 打开时来一声：既是确认，也顺便解锁音频
+}
+
 onMounted(async () => {
   try {
     const [records, wrong] = await Promise.all([
@@ -285,6 +308,57 @@ onMounted(async () => {
   padding: 0 10px;
   color: var(--text-sub);
   font-size: 15px;
+}
+
+/* ---------- 答题音效开关 ---------- */
+.sfx-row {
+  margin-top: 14px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sfx-txt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sfx-ico {
+  font-size: 20px;
+}
+
+.sfx-switch {
+  flex: none;
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.sfx-switch .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease;
+}
+
+.sfx-switch.on {
+  background: var(--primary);
+}
+
+.sfx-switch.on .knob {
+  transform: translateX(22px);
 }
 
 .today {

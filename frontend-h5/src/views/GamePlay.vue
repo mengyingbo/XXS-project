@@ -202,6 +202,7 @@ import HandwriteInput from '@/components/questions/HandwriteInput.vue'
 import { childApi } from '@/api/child'
 import { useChildStore } from '@/stores/child'
 import { showToast } from '@/composables/useToast'
+import { sfxCorrect, sfxTap, sfxWrong } from '@/utils/sfx'
 import type { AnswerCheck, AnswerItemReq, QuestionNode, SessionStart } from '@/types/api'
 import {
   formatAnswerValue,
@@ -212,6 +213,9 @@ import {
 } from '@/utils/answer'
 
 const PRAISES = ['太棒了！', '真厉害！', '继续保持！', '你真聪明！', '答得又快又准！']
+
+// 连对计数：答对 +1、答错清零；驱动答对音效逐级升调（多邻国式 combo）
+let comboStreak = 0
 
 const route = useRoute()
 const router = useRouter()
@@ -363,6 +367,14 @@ async function runCheck(value: AnswerValue) {
     }
     feedback.value = res
     encourage.value = PRAISES[Math.floor(Math.random() * PRAISES.length)]
+    // 多邻国式反馈音效：答对上扬双音（连对越多音组越高），答错低沉双音
+    if (res.isCorrect) {
+      comboStreak += 1
+      sfxCorrect(comboStreak)
+    } else {
+      comboStreak = 0
+      sfxWrong()
+    }
   } catch (e) {
     checkError.value = true
     checkErrMsg.value = (e as Error).message
@@ -372,7 +384,10 @@ async function runCheck(value: AnswerValue) {
 }
 
 function doCheck() {
-  if (canCheck.value) runCheck(qModel.value)
+  if (canCheck.value) {
+    sfxTap()
+    runCheck(qModel.value)
+  }
 }
 
 function skip() {
