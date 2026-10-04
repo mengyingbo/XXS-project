@@ -151,7 +151,7 @@ public class DoubanMovieService {
                     title != null ? title : "未知",
                     year,
                     rating,
-                    downloadPoster(poster),  // 下载到本地，避免豆瓣外链防盗链
+                    poster,  // v3.3：直接返回豆瓣原图 URL，管理端用 referrerpolicy="no-referrer" 直连展示；仅点选候选 fetchDetail 时才下载落盘
                     subjectUrl,
                     director,
                     summary

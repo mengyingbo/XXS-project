@@ -1,4 +1,4 @@
-﻿import { request } from './http'
+import { request } from './http'
 import type {
   AdjustPointsResult,
   Child,
@@ -253,6 +253,9 @@ export const adminApi = {
   },
   movieDelete(id: number): Promise<void> {
     return request({ url: `/movie/${id}`, method: 'DELETE' })
+  },
+  movieMove(id: number, dir: 'up' | 'down'): Promise<void> {
+    return request({ url: `/movie/${id}/move`, method: 'PUT', params: { dir } })
   },
 
   // ---------------- 豆瓣检索 ----------------

@@ -25,13 +25,13 @@
         <template #default="{ row }">{{ row.duration }}分钟</template>
       </el-table-column>
       <el-table-column label="评分" width="80">
-        <template #default="{ row }">★ {{ row.rating }}</template>
+        <template #default="{ row }">{{ row.rating > 0 ? '★ ' + row.rating : '-' }}</template>
       </el-table-column>
       <el-table-column prop="theme" label="主题" width="120" show-overflow-tooltip />
       <el-table-column prop="note" label="简介" min-width="200" show-overflow-tooltip />
       <el-table-column label="上架" width="80">
         <template #default="{ row }">
-          <el-tag :type="row.enabled ? 'success' : 'info'" size="small">{{ row.enabled ? '上架' : '下架' }}</el-tag>
+          <el-switch v-model="row.enabled" @change="toggleEnabled(row)" />
         </template>
       </el-table-column>
       <el-table-column label="默认观看" width="90">
@@ -39,8 +39,10 @@
           <el-tag :type="row.watched ? 'success' : 'warning'" size="small">{{ row.watched ? '已看' : '未看' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column label="操作" width="230" fixed="right">
         <template #default="{ row }">
+          <el-button size="small" :icon="ArrowUp" circle title="上移" @click="move(row, 'up')" />
+          <el-button size="small" :icon="ArrowDown" circle title="下移" @click="move(row, 'down')" />
           <el-button size="small" @click="openEdit(row)">编辑</el-button>
           <el-button size="small" type="danger" @click="del(row)">删除</el-button>
         </template>
@@ -138,7 +140,7 @@
           class="candidate-item"
           @click="selectCandidate(c)"
         >
-          <img :src="resolveImg(c.posterUrl)" class="candidate-poster" />
+          <img :src="resolveImg(c.posterUrl)" class="candidate-poster" referrerpolicy="no-referrer" />
           <div class="candidate-info">
             <div class="candidate-title">{{ c.title }}</div>
             <div class="candidate-meta">{{ c.year }} · ★{{ c.rating }} · {{ c.director }}</div>
@@ -154,6 +156,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UploadFile } from 'element-plus'
+import { ArrowDown, ArrowUp } from '@element-plus/icons-vue'
 import { adminApi } from '@/api/admin'
 import type { DoubanCandidate, Movie } from '@/types/api'
 
@@ -245,8 +248,8 @@ async function load(targetPage?: number) {
 
 function openCreate() {
   Object.assign(form, {
-    id: 0, no: list.value.length + 1, name: '', type: '', duration: 90, rating: 8.0,
-    theme: '', note: '', cover: '', watched: false, enabled: true, sortOrder: list.value.length
+    id: 0, no: total.value + 1, name: '', type: '', duration: 90, rating: 8.0,
+    theme: '', note: '', cover: '', watched: false, enabled: true, sortOrder: total.value
   })
   editOpen.value = true
 }
@@ -310,6 +313,26 @@ function del(row: Movie) {
       await load()
     })
     .catch(() => undefined)
+}
+
+/** 行内快捷切换上架/下架，失败时回滚显示 */
+async function toggleEnabled(row: Movie) {
+  try {
+    await adminApi.movieUpdate(row.id, {
+      no: row.no, name: row.name, type: row.type, duration: row.duration,
+      rating: row.rating, theme: row.theme, note: row.note, cover: row.cover,
+      watched: row.watched, enabled: row.enabled, sortOrder: row.sortOrder
+    })
+    ElMessage.success(row.enabled ? '已上架' : '已下架')
+  } catch {
+    row.enabled = !row.enabled
+  }
+}
+
+/** 上移/下移排序（后端全序交换，跨页也生效） */
+async function move(row: Movie, dir: 'up' | 'down') {
+  await adminApi.movieMove(row.id, dir)
+  await load()
 }
 
 onMounted(() => load())

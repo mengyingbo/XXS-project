@@ -50,6 +50,12 @@ public class AdminMovieController {
         return Result.ok(adminMovieService.updateMovie(id, req));
     }
 
+    @PutMapping("/movie/{id}/move")
+    public Result<Void> moveMovie(@PathVariable Long id, @RequestParam String dir) {
+        adminMovieService.moveMovie(id, dir);
+        return Result.ok();
+    }
+
     @DeleteMapping("/movie/{id}")
     public Result<Void> deleteMovie(@PathVariable Long id) {
         adminMovieService.deleteMovie(id);
