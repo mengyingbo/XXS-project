@@ -232,3 +232,20 @@ export interface WrongQuestion {
   lessonTitle?: string
   analysis?: string | null
 }
+
+// ---- 电影片库（公开接口，免登录） ----
+
+export interface Movie {
+  id: number
+  no: number
+  name: string
+  type: string
+  duration: number
+  rating: number
+  theme: string
+  note: string
+  cover: string
+  watched: boolean
+  enabled: boolean
+  sortOrder: number
+}

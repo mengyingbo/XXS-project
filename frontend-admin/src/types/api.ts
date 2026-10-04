@@ -225,3 +225,22 @@ export interface UploadResult {
   fileName: string
   url: string
 }
+
+// ---------------- 电影片库 ----------------
+
+export interface Movie {
+  id: number
+  no: number
+  name: string
+  type: string
+  duration: number
+  rating: number
+  theme: string
+  note: string
+  cover: string
+  watched: boolean
+  enabled: boolean
+  sortOrder: number
+  createdAt: string
+  updatedAt: string
+}

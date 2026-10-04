@@ -13,6 +13,7 @@ import Prizes from '@/views/Prizes.vue'
 import Redeems from '@/views/Redeems.vue'
 import ConfigView from '@/views/ConfigView.vue'
 import StatsView from '@/views/StatsView.vue'
+import Movies from '@/views/Movies.vue'
 
 // 静态导入：兼容 iOS 11（不支持动态 import()）
 const router = createRouter({
@@ -31,6 +32,7 @@ const router = createRouter({
         { path: 'questions', name: 'questions', component: Questions },
         { path: 'import', name: 'import', component: QuestionImport },
         { path: 'prizes', name: 'prizes', component: Prizes },
+        { path: 'movies', name: 'movies', component: Movies },
         { path: 'redeems', name: 'redeems', component: Redeems },
         { path: 'config', name: 'config', component: ConfigView },
         { path: 'stats', name: 'stats', component: StatsView }

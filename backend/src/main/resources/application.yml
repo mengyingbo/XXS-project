@@ -7,7 +7,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 开发期直连家里服务器的 MySQL；部署时可用环境变量覆盖
-    url: ${XXS_DB_URL:jdbc:mysql://192.168.1.53:3306/xxs_game?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    url: ${XXS_DB_URL:jdbc:mysql://192.168.110.99:3306/xxs_game?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
     username: ${XXS_DB_USER:xxs}
     password: ${XXS_DB_PASSWORD:Xxs2026pwd}
     hikari:

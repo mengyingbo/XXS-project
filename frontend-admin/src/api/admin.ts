@@ -9,6 +9,7 @@ import type {
   Lesson,
   Level,
   LoginResult,
+  Movie,
   PageData,
   Prize,
   Question,
@@ -230,5 +231,25 @@ export const adminApi = {
       data: form,
       headers: { 'Content-Type': 'multipart/form-data' }
     })
+  },
+
+  // ---------------- 电影片库 ----------------
+  movieList(params: { page: number; size: number; keyword?: string; enabled?: boolean }): Promise<PageData<Movie>> {
+    return request({ url: '/movie', method: 'GET', params })
+  },
+  movieCreate(data: {
+    no?: number; name: string; type?: string; duration?: number; rating?: number;
+    theme?: string; note?: string; cover?: string; watched?: boolean; enabled?: boolean; sortOrder?: number
+  }): Promise<Movie> {
+    return request({ url: '/movie', method: 'POST', data })
+  },
+  movieUpdate(id: number, data: {
+    no?: number; name: string; type?: string; duration?: number; rating?: number;
+    theme?: string; note?: string; cover?: string; watched?: boolean; enabled?: boolean; sortOrder?: number
+  }): Promise<Movie> {
+    return request({ url: `/movie/${id}`, method: 'PUT', data })
+  },
+  movieDelete(id: number): Promise<void> {
+    return request({ url: `/movie/${id}`, method: 'DELETE' })
   }
 }

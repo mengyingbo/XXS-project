@@ -53,8 +53,18 @@
       <button v-if="search" class="sb-clear" @click="search = ''">✕</button>
     </div>
 
+    <!-- 加载中 -->
+    <div v-if="loading" class="empty">
+      <span class="emoji">⏳</span>
+      正在加载电影列表…
+    </div>
+    <!-- 加载失败 -->
+    <div v-else-if="error" class="empty">
+      <span class="emoji">😵</span>
+      加载失败，请稍后重试
+    </div>
     <!-- 电影网格 -->
-    <div v-if="filtered.length" class="movie-grid">
+    <div v-else-if="filtered.length" class="movie-grid">
       <button
         v-for="m in filtered"
         :key="m.no"
@@ -118,24 +128,27 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { movies as initialMovies, type Movie } from '@/data/movieData'
+import { movieApi } from '@/api/movie'
+import type { Movie } from '@/types/api'
 
 const router = useRouter()
 
-// 观看状态用 localStorage 持久化
-const STORAGE_KEY = 'movie-watched-status'
+// 观看状态用 localStorage 持久化（按数据库 id 存储）
+const STORAGE_KEY = 'movie-watched-status-v2'
+
+// 从后端 API 获取的电影列表
+const rawMovies = ref<Movie[]>([])
+const loading = ref(true)
+const error = ref(false)
 
 function loadStatus(): Record<number, boolean> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) return JSON.parse(raw)
   } catch {}
-  // 默认用 Excel 中的初始状态
-  const map: Record<number, boolean> = {}
-  initialMovies.forEach(m => { map[m.no] = m.watched })
-  return map
+  return {}
 }
 
 function saveStatus(map: Record<number, boolean>) {
@@ -146,13 +159,28 @@ function saveStatus(map: Record<number, boolean>) {
 
 const statusMap = ref<Record<number, boolean>>(loadStatus())
 
-// 合并初始数据与 localStorage 状态
+// 合并 API 数据与 localStorage 状态
 const movies = computed<Movie[]>(() =>
-  initialMovies.map(m => ({
+  rawMovies.value.map(m => ({
     ...m,
-    watched: statusMap.value[m.no] ?? m.watched
+    watched: statusMap.value[m.id] ?? m.watched
   }))
 )
+
+// 加载电影列表
+async function loadMovies() {
+  loading.value = true
+  error.value = false
+  try {
+    rawMovies.value = await movieApi.list()
+  } catch {
+    error.value = true
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(loadMovies)
 
 const watchedCount = computed(() => movies.value.filter(m => m.watched).length)
 const unwatchedCount = computed(() => movies.value.length - watchedCount.value)
@@ -200,9 +228,9 @@ function closeDetail() {
 
 function toggleWatch() {
   if (!selected.value) return
-  const no = selected.value.no
-  const newStatus = !statusMap.value[no]
-  statusMap.value = { ...statusMap.value, [no]: newStatus }
+  const id = selected.value.id
+  const newStatus = !statusMap.value[id]
+  statusMap.value = { ...statusMap.value, [id]: newStatus }
   saveStatus(statusMap.value)
   selected.value = { ...selected.value, watched: newStatus }
 }

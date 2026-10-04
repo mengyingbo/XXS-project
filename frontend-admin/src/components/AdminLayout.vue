@@ -9,6 +9,7 @@
         <el-menu-item index="/questions"><el-icon><EditPen /></el-icon>题库管理</el-menu-item>
         <el-menu-item index="/import"><el-icon><Upload /></el-icon>批量导入</el-menu-item>
         <el-menu-item index="/prizes"><el-icon><Present /></el-icon>奖品管理</el-menu-item>
+        <el-menu-item index="/movies"><el-icon><Film /></el-icon>电影管理</el-menu-item>
         <el-menu-item index="/redeems">
           <el-icon><List /></el-icon>
           <template #title>
@@ -51,7 +52,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   Odometer, User, Reading, EditPen, Upload, Present, List,
-  Setting, ArrowDown, DataAnalysis
+  Setting, ArrowDown, DataAnalysis, Film
 } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 import { adminApi } from '@/api/admin'

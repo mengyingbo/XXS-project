@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -141,5 +142,22 @@ public final class AdminDtos {
             @Pattern(regexp = "APPROVE|REJECT|DELIVER", message = "操作类型只能是 APPROVE/REJECT/DELIVER")
             String action,
             @Size(max = 255, message = "备注过长") String remark) {
+    }
+
+    // ---------------- 电影片库 ----------------
+
+    public record MovieSaveReq(
+            Integer no,
+            @NotBlank(message = "电影名称不能为空")
+            @Size(max = 100, message = "名称过长") String name,
+            @Size(max = 50, message = "类型过长") String type,
+            Integer duration,
+            BigDecimal rating,
+            @Size(max = 100, message = "主题过长") String theme,
+            @Size(max = 500, message = "看点过长") String note,
+            @Size(max = 255, message = "封面地址过长") String cover,
+            Boolean watched,
+            Boolean enabled,
+            Integer sortOrder) {
     }
 }
