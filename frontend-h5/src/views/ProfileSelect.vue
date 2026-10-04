@@ -1,5 +1,6 @@
 <template>
   <div class="page page-no-tab select-page">
+    <button class="back-btn" @click="router.push('/')">‹ 返回乐园</button>
     <header class="hero">
       <div class="hero-emoji">🎒✨</div>
       <h1 class="hero-title">知识闯关</h1>
@@ -191,6 +192,19 @@ onMounted(load)
 </script>
 
 <style scoped>
+.back-btn {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-sub);
+  padding: 8px 4px;
+  align-self: flex-start;
+  transition: color 0.15s ease;
+}
+
+.back-btn:active {
+  color: var(--primary);
+}
+
 .hero {
   text-align: center;
   padding: 26px 0 22px;

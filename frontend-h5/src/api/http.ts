@@ -31,10 +31,10 @@ http.interceptors.request.use((config) => {
 /** 会话失效：清 token 并回档案选择页（后端过期返回 HTTP 200 + code 401，需两处都处理） */
 function handleUnauthorized() {
   clearToken()
-  // hash 路由下路径在 location.hash；避免在档案选择/PIN 页循环跳转
+  // hash 路由下路径在 location.hash；避免在主页/档案选择/PIN 页循环跳转
   const routePath = location.hash ? location.hash.replace(/^#/, '') : location.pathname
-  if (routePath !== '/pin' && routePath !== '/' && routePath !== '') {
-    location.replace('/')
+  if (routePath !== '/pin' && routePath !== '/profiles' && routePath !== '/' && routePath !== '') {
+    location.replace('/#/profiles')
   }
 }
 

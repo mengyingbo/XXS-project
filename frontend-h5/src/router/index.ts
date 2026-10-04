@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { getToken } from '@/api/http'
 import { useChildStore } from '@/stores/child'
+import Home from '@/views/Home.vue'
 import ProfileSelect from '@/views/ProfileSelect.vue'
 import PinLogin from '@/views/PinLogin.vue'
 import SubjectSelect from '@/views/SubjectSelect.vue'
@@ -9,6 +10,7 @@ import GamePlay from '@/views/GamePlay.vue'
 import ResultView from '@/views/ResultView.vue'
 import Shop from '@/views/Shop.vue'
 import Me from '@/views/Me.vue'
+import MovieLibrary from '@/views/MovieLibrary.vue'
 import GameHub from '@/views/games/GameHub.vue'
 import Klotski from '@/views/games/Klotski.vue'
 import Puzzle from '@/views/games/Puzzle.vue'
@@ -20,7 +22,10 @@ import IdiomGame from '@/views/games/IdiomGame.vue'
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: '/', name: 'profiles', component: ProfileSelect },
+    /* ---- 儿童成长乐园（v3.0）：主导航页，免登录 ---- */
+    { path: '/', name: 'home', component: Home },
+    /* ---- 知识闯关：档案选择 ---- */
+    { path: '/profiles', name: 'profiles', component: ProfileSelect },
     { path: '/pin', name: 'pin', component: PinLogin },
     {
       path: '/subject',
@@ -59,6 +64,8 @@ const router = createRouter({
       component: Me,
       meta: { auth: true }
     },
+    /* ---- 电影片库（v3.0）：免登录，静态数据 ---- */
+    { path: '/movies', name: 'movies', component: MovieLibrary },
     /* ---- 游戏乐园（v2.1）：免登录，与闯关体系完全独立 ---- */
     { path: '/games', name: 'games', component: GameHub },
     { path: '/games/klotski', name: 'games-klotski', component: Klotski },

@@ -1,6 +1,6 @@
 <template>
   <div class="page page-no-tab pin-page">
-    <button class="back" @click="router.push('/')">← 换个档案</button>
+    <button class="back" @click="router.push('/profiles')">← 换个档案</button>
 
     <div class="who" v-if="target">
       <AvatarFace :avatar="target.avatar" size="lg" />

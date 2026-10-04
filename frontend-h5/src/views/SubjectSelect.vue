@@ -48,7 +48,7 @@ function pick(s: 'chinese' | 'math' | 'english') {
 function switchChild() {
   store.clearSubject()
   store.logout()
-  router.replace('/')
+  router.replace('/profiles')
 }
 </script>
 
