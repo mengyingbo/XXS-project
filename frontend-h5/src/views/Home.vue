@@ -1,5 +1,10 @@
 <template>
   <div class="page page-no-tab home-page">
+    <!-- 右上角管理员登录按钮 -->
+    <button class="admin-entry" @click="goAdmin" title="家长管理后台">
+      <span class="ae-icon">⚙</span>
+    </button>
+
     <!-- 顶部标题区 -->
     <header class="hero">
       <div class="hero-emoji">🎡🌈</div>
@@ -63,6 +68,10 @@ const router = useRouter()
 function go(path: string) {
   router.push(path)
 }
+
+function goAdmin() {
+  window.open('/admin/', '_blank')
+}
 </script>
 
 <style scoped>
@@ -72,6 +81,34 @@ function go(path: string) {
   flex-direction: column;
   min-height: 100vh;
   justify-content: center;
+}
+
+/* ---- 右上角管理员入口 ---- */
+.admin-entry {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  z-index: 10;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.admin-entry:active {
+  transform: scale(0.9);
+  opacity: 1;
+}
+
+.ae-icon {
+  font-size: 20px;
+  line-height: 1;
 }
 
 .hero {
