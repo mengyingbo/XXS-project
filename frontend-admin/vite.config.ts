@@ -11,7 +11,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  // 兼容 iOS 11 Safari 11：转译现代语法 + 禁用动态 import 代码分割
+  // 管理端是家长使用，无需 iOS 11 单文件限制；拆分 vendor chunk 加速首屏
   build: {
     target: 'es2015',
     cssTarget: 'safari11',
@@ -21,10 +21,13 @@ export default defineConfig({
       compress: { ecma: 2015 },
       mangle: { safari10: true }
     },
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
-        inlineDynamicImports: true,
-        manualChunks: undefined
+        manualChunks: {
+          vendor: ['vue', 'vue-router', 'pinia', 'axios'],
+          'element-plus': ['element-plus', '@element-plus/icons-vue']
+        }
       }
     }
   },
