@@ -4,6 +4,8 @@ import type {
   Child,
   ConfigRow,
   DashboardData,
+  DoubanCandidate,
+  DoubanMovieInfo,
   ImportResult,
   ImportRowReq,
   Lesson,
@@ -251,5 +253,13 @@ export const adminApi = {
   },
   movieDelete(id: number): Promise<void> {
     return request({ url: `/movie/${id}`, method: 'DELETE' })
+  },
+
+  // ---------------- 豆瓣检索 ----------------
+  movieSearch(name: string): Promise<DoubanCandidate[]> {
+    return request({ url: '/movie/search', method: 'GET', params: { name } })
+  },
+  movieFetch(url: string): Promise<DoubanMovieInfo> {
+    return request({ url: '/movie/fetch', method: 'GET', params: { url } })
   }
 }

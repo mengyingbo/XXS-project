@@ -160,4 +160,28 @@ public final class AdminDtos {
             Boolean enabled,
             Integer sortOrder) {
     }
+
+    // ---------------- 豆瓣检索 ----------------
+
+    /** 搜索候选 */
+    public record DoubanCandidate(
+            String title,
+            String year,
+            String rating,
+            String posterUrl,
+            String subjectUrl,
+            String director,
+            String summary) {
+    }
+
+    /** 详情结果（直接对齐表单字段） */
+    public record DoubanMovieInfo(
+            String name,
+            String type,
+            int duration,
+            double rating,
+            String theme,
+            String note,
+            String cover) {
+    }
 }

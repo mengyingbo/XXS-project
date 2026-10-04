@@ -28,6 +28,7 @@
         <template #default="{ row }">★ {{ row.rating }}</template>
       </el-table-column>
       <el-table-column prop="theme" label="主题" width="120" show-overflow-tooltip />
+      <el-table-column prop="note" label="简介" min-width="200" show-overflow-tooltip />
       <el-table-column label="上架" width="80">
         <template #default="{ row }">
           <el-tag :type="row.enabled ? 'success' : 'info'" size="small">{{ row.enabled ? '上架' : '下架' }}</el-tag>
@@ -60,7 +61,10 @@
     <el-dialog v-model="editOpen" :title="form.id ? '编辑电影' : '新增电影'" width="560px">
       <el-form :model="form" label-width="100px">
         <el-form-item label="电影名称" required>
-          <el-input v-model="form.name" maxlength="100" />
+          <div style="display:flex;gap:8px;width:100%">
+            <el-input v-model="form.name" maxlength="100" style="flex:1" @keyup.enter="searchDouban" />
+            <el-button type="warning" :loading="searching" @click="searchDouban">🔍 检索</el-button>
+          </div>
         </el-form-item>
         <el-form-item label="显示序号">
           <el-input-number v-model="form.no" :min="0" />
@@ -121,6 +125,28 @@
         <el-button type="primary" :loading="saving" @click="save">保存</el-button>
       </template>
     </el-dialog>
+
+    <!-- 豆瓣候选弹层 -->
+    <el-dialog v-model="doubanOpen" title="选择匹配的电影" width="520px" append-to-body>
+      <div v-loading="searching">
+        <div v-if="candidates.length === 0 && !searching" class="empty-tip">
+          未找到相关电影，请手动填写
+        </div>
+        <div
+          v-for="(c, i) in candidates"
+          :key="i"
+          class="candidate-item"
+          @click="selectCandidate(c)"
+        >
+          <img :src="resolveImg(c.posterUrl)" class="candidate-poster" />
+          <div class="candidate-info">
+            <div class="candidate-title">{{ c.title }}</div>
+            <div class="candidate-meta">{{ c.year }} · ★{{ c.rating }} · {{ c.director }}</div>
+            <div class="candidate-summary">{{ c.summary }}</div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -129,7 +155,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import { adminApi } from '@/api/admin'
-import type { Movie } from '@/types/api'
+import type { DoubanCandidate, Movie } from '@/types/api'
 
 const list = ref<Movie[]>([])
 const total = ref(0)
@@ -145,6 +171,55 @@ const form = reactive({
   id: 0, no: 0, name: '', type: '', duration: 90, rating: 8.0,
   theme: '', note: '', cover: '', watched: false, enabled: true, sortOrder: 0
 })
+
+// 豆瓣检索
+const doubanOpen = ref(false)
+const searching = ref(false)
+const fetching = ref(false)
+const candidates = ref<DoubanCandidate[]>([])
+
+async function searchDouban() {
+  if (!form.name.trim()) {
+    ElMessage.warning('请先输入电影名称')
+    return
+  }
+  searching.value = true
+  doubanOpen.value = true
+  candidates.value = []
+  try {
+    candidates.value = await adminApi.movieSearch(form.name.trim())
+    if (candidates.value.length === 0) {
+      ElMessage.info('未找到相关电影，请手动填写')
+    }
+  } catch (e: any) {
+    ElMessage.error(e.message || '检索失败，请手动填写')
+    doubanOpen.value = false
+  } finally {
+    searching.value = false
+  }
+}
+
+async function selectCandidate(c: DoubanCandidate) {
+  doubanOpen.value = false
+  fetching.value = true
+  ElMessage.info(`正在获取「${c.title}」的详细信息...`)
+  try {
+    const info = await adminApi.movieFetch(c.subjectUrl)
+    // 自动填充表单
+    if (info.name) form.name = info.name
+    if (info.type) form.type = info.type
+    if (info.duration) form.duration = info.duration
+    if (info.rating) form.rating = info.rating
+    if (info.theme) form.theme = info.theme
+    if (info.note) form.note = info.note
+    if (info.cover) form.cover = info.cover
+    ElMessage.success('信息已填充，请按需修改推荐主题后保存')
+  } catch (e: any) {
+    ElMessage.error(e.message || '获取详情失败，请手动填写')
+  } finally {
+    fetching.value = false
+  }
+}
 
 function resolveImg(image: string): string {
   if (/^https?:\/\//.test(image)) return image
@@ -265,5 +340,62 @@ onMounted(() => load())
   border: 1px solid #e8eaf1;
   border-radius: 6px;
   object-fit: cover;
+}
+
+/* 豆瓣候选弹层 */
+.empty-tip {
+  text-align: center;
+  color: #999;
+  padding: 30px 0;
+}
+
+.candidate-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #e8eaf1;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.candidate-item:hover {
+  border-color: #409eff;
+  background: #f0f7ff;
+}
+
+.candidate-poster {
+  width: 52px;
+  height: 74px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex: none;
+}
+
+.candidate-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.candidate-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.candidate-meta {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.candidate-summary {
+  font-size: 12px;
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

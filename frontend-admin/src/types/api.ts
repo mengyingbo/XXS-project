@@ -244,3 +244,25 @@ export interface Movie {
   createdAt: string
   updatedAt: string
 }
+
+// ---------------- 豆瓣检索 ----------------
+
+export interface DoubanCandidate {
+  title: string
+  year: string
+  rating: string
+  posterUrl: string
+  subjectUrl: string
+  director: string
+  summary: string
+}
+
+export interface DoubanMovieInfo {
+  name: string
+  type: string
+  duration: number
+  rating: number
+  theme: string
+  note: string
+  cover: string
+}

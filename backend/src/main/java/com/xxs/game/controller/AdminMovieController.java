@@ -4,6 +4,7 @@ import com.xxs.game.common.Result;
 import com.xxs.game.dto.AdminDtos;
 import com.xxs.game.entity.Movie;
 import com.xxs.game.service.AdminMovieService;
+import com.xxs.game.service.DoubanMovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +29,8 @@ import java.util.Map;
 public class AdminMovieController {
 
     private final AdminMovieService adminMovieService;
+
+    private final DoubanMovieService doubanMovieService;
 
     @GetMapping("/movie")
     public Result<Map<String, Object>> listMovies(@RequestParam(defaultValue = "1") int page,
@@ -50,5 +54,17 @@ public class AdminMovieController {
     public Result<Void> deleteMovie(@PathVariable Long id) {
         adminMovieService.deleteMovie(id);
         return Result.ok();
+    }
+
+    // ---------------- 豆瓣检索 ----------------
+
+    @GetMapping("/movie/search")
+    public Result<List<AdminDtos.DoubanCandidate>> searchMovies(@RequestParam String name) {
+        return Result.ok(doubanMovieService.search(name));
+    }
+
+    @GetMapping("/movie/fetch")
+    public Result<AdminDtos.DoubanMovieInfo> fetchMovieDetail(@RequestParam String url) {
+        return Result.ok(doubanMovieService.fetchDetail(url));
     }
 }
